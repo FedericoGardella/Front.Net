@@ -1,33 +1,30 @@
+// src/components/Navbar.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ selectedTab, onTabClick }) => {
+const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
   return (
-    <div>
-      <div className="navbar bg-base-100">
-        <div className="flex-1">
-          <Link to="/create-user" className="btn btn-primary">
+    <div className="navbar bg-base-100">
+      <div className="flex-1">
+        <Link to="/" className="btn btn-primary">
+          Inicio
+        </Link>
+        {isAuthenticated && (
+          <Link to="/create-user" className="btn btn-primary ml-4">
             Registrar Paciente
           </Link>
-        </div>
-        <div className="flex-none">
-          <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Avatar"
-                  src="https://as2.ftcdn.net/v2/jpg/03/31/69/91/1000_F_331699188_lRpvqxO5QRtwOM05gR50ImaaJgBx68vi.jpg"
-                />
-              </div>
-            </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-              <li><a href="#perfil">Perfil</a></li>
-              <li><a href="#logout">Logout</a></li>
-            </ul>
-          </div>
-        </div>
+        )}
+      </div>
+      <div className="flex-none">
+        {isAuthenticated ? (
+          <button onClick={onLogout} className="btn btn-ghost">
+            Logout
+          </button>
+        ) : (
+          <Link to="/login" className="btn btn-primary">
+            Iniciar Sesión
+          </Link>
+        )}
       </div>
     </div>
   );
