@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import RegisterPaciente from './components/RegisterPaciente';
+import ListTiposSeguros from './components/ListTiposSeguros';
+import CreateTipoSeguro from './components/CreateTipoSeguro';
 
 const App = () => {
   const [selectedTab, setSelectedTab] = useState('Location1');
@@ -18,6 +20,8 @@ const App = () => {
           <Navbar selectedTab={selectedTab} onTabClick={handleTabClick} />
           <Routes>
             <Route path='/create-user' element={<RegisterPaciente />} />
+            <Route path='/tiposseguros' element={<ListTiposSeguros />} />
+            <Route path='/create-tiposeguro' element={<CreateTipoSeguro />} />
           </Routes>
         </div>
       </div>

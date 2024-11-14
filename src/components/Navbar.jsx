@@ -9,6 +9,9 @@ const Navbar = ({ selectedTab, onTabClick }) => {
           <Link to="/create-user" className="btn btn-primary">
             Registrar Paciente
           </Link>
+          <Link to="/tiposseguros" className="btn btn-primary">
+            Tipos de Seguros
+          </Link>
         </div>
         <div className="flex-none">
           <div className="dropdown dropdown-end">
