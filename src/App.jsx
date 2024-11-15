@@ -5,6 +5,7 @@ import RegisterPaciente from './components/RegisterPaciente';
 import Login from './components/Login';
 import Home from './components/Home';
 import HistoriasClinicas from './components/HistoriasClinicas';
+import Diagnosticos from './components/Diagnosticos';
 
 const App = () => {
   const [selectedTab, setSelectedTab] = useState('Location1');
@@ -33,7 +34,6 @@ const App = () => {
   return (
     <Router>
       <div className="overflow-x-hidden h-screen flex flex-col">
-        {/* Fondo de la aplicación */}
         <div className="flex-grow bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
           <Navbar
             selectedTab={selectedTab}
@@ -51,6 +51,8 @@ const App = () => {
               }
             />
             <Route path="/historiasclinicas" element={<HistoriasClinicas />} />
+            
+            <Route path="/diagnosticos/:id" element={<Diagnosticos />} />
           </Routes>
         </div>
       </div>
@@ -59,7 +61,3 @@ const App = () => {
 };
 
 export default App;
-
-
-
-
