@@ -9,10 +9,19 @@ const Diagnosticos = () => {
   useEffect(() => {
     const fetchDiagnosticos = async () => {
       try {
-        const response = await fetch(`http://localhost:8084/api/HistoriasClinicas/${id}/diagnosticos`);
+        const token = localStorage.getItem('token'); // Obtén el token del localStorage
+        const response = await fetch(`http://localhost:8084/api/HistoriasClinicas/10007/Diagnosticos`, { //Harcodeada la HistoriaClinica 10007, enviar el id de la historia clinica del paciente
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // Agrega el token como encabezado
+          },
+        });
+
         if (!response.ok) {
           throw new Error('Error al obtener los diagnósticos');
         }
+
         const data = await response.json();
         setDiagnosticos(data);
       } catch (error) {
