@@ -1,4 +1,3 @@
-// src/components/Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -45,11 +44,11 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-transparent">
-      <div className="bg-neutral-800/70 backdrop-blur-lg shadow-lg rounded-lg p-8 max-w-md w-full">
-        <h2 className="text-2xl font-bold text-center mb-6 text-white">Iniciar Sesión</h2>
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-cyan-700 to-blue-900 text-gray-800">
+      <div className="bg-white shadow-2xl rounded-xl p-10 max-w-md w-full">
+        <h2 className="text-3xl font-bold text-center mb-6 text-blue-800">Iniciar Sesión</h2>
         
-        <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
+        <form onSubmit={handleSubmit} className="space-y-6" autoComplete="off">
           <input
             type="text"
             name="username"
@@ -57,7 +56,7 @@ const Login = ({ onLogin }) => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            className="w-full p-3 border border-neutral-600 rounded-md focus:outline-none focus:border-blue-500 bg-neutral-700 text-white placeholder-gray-400"
+            className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100"
           />
           <input
             type="password"
@@ -66,18 +65,18 @@ const Login = ({ onLogin }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full p-3 border border-neutral-600 rounded-md focus:outline-none focus:border-blue-500 bg-neutral-700 text-white placeholder-gray-400"
+            className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100"
           />
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white font-semibold py-3 rounded-md hover:bg-blue-700 transition-colors"
+            className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition-colors"
           >
             Iniciar Sesión
           </button>
         </form>
 
         {error && (
-          <p className="mt-4 text-center text-red-500">
+          <p className="mt-4 text-center text-red-500 font-semibold">
             {error}
           </p>
         )}

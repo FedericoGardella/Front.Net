@@ -56,80 +56,76 @@ const RegisterPaciente = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-transparent">
-            <div className="bg-neutral-800/70 backdrop-blur-lg shadow-lg rounded-lg p-8 max-w-md w-full">
-                <h2 className="text-2xl font-bold text-center mb-6 text-white">Registro de Paciente</h2>
+        <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-cyan-700 to-blue-900 text-gray-800">
+            <div className="bg-white shadow-2xl rounded-xl p-10 max-w-2xl w-full space-y-6">
+                <h2 className="text-3xl font-bold text-center text-blue-800 mb-4">Registro de Paciente</h2>
                 
                 <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
-                    <input
-                        type="text"
-                        name="documento"
-                        placeholder="Documento"
-                        value={formData.documento}
-                        onChange={handleChange}
-                        autoComplete="off"
-                        required
-                        className="w-full p-3 border border-neutral-600 rounded-md focus:outline-none focus:border-blue-500 bg-neutral-700 text-white placeholder-gray-400"
-                    />
-                    <input
-                        type="text"
-                        name="nombres"
-                        placeholder="Nombres"
-                        value={formData.nombres}
-                        onChange={handleChange}
-                        autoComplete="off"
-                        required
-                        className="w-full p-3 border border-neutral-600 rounded-md focus:outline-none focus:border-blue-500 bg-neutral-700 text-white placeholder-gray-400"
-                    />
-                    <input
-                        type="text"
-                        name="apellidos"
-                        placeholder="Apellidos"
-                        value={formData.apellidos}
-                        onChange={handleChange}
-                        autoComplete="off"
-                        required
-                        className="w-full p-3 border border-neutral-600 rounded-md focus:outline-none focus:border-blue-500 bg-neutral-700 text-white placeholder-gray-400"
-                    />
-                    <input
-                        type="text"
-                        name="telefono"
-                        placeholder="Teléfono"
-                        value={formData.telefono}
-                        onChange={handleChange}
-                        autoComplete="off"
-                        className="w-full p-3 border border-neutral-600 rounded-md focus:outline-none focus:border-blue-500 bg-neutral-700 text-white placeholder-gray-400"
-                    />
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Correo electrónico"
-                        value={formData.email}
-                        onChange={handleChange}
-                        autoComplete="off"
-                        required
-                        className="w-full p-3 border border-neutral-600 rounded-md focus:outline-none focus:border-blue-500 bg-neutral-700 text-white placeholder-gray-400"
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Contraseña"
-                        value={formData.password}
-                        onChange={handleChange}
-                        autoComplete="new-password"
-                        required
-                        className="w-full p-3 border border-neutral-600 rounded-md focus:outline-none focus:border-blue-500 bg-neutral-700 text-white placeholder-gray-400"
-                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input
+                            type="text"
+                            name="documento"
+                            placeholder="Documento"
+                            value={formData.documento}
+                            onChange={handleChange}
+                            required
+                            className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100"
+                        />
+                        <input
+                            type="text"
+                            name="nombres"
+                            placeholder="Nombres"
+                            value={formData.nombres}
+                            onChange={handleChange}
+                            required
+                            className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100"
+                        />
+                        <input
+                            type="text"
+                            name="apellidos"
+                            placeholder="Apellidos"
+                            value={formData.apellidos}
+                            onChange={handleChange}
+                            required
+                            className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100"
+                        />
+                        <input
+                            type="text"
+                            name="telefono"
+                            placeholder="Teléfono"
+                            value={formData.telefono}
+                            onChange={handleChange}
+                            className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100"
+                        />
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Correo electrónico"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100"
+                        />
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Contraseña"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100"
+                        />
+                    </div>
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 text-white font-semibold py-3 rounded-md hover:bg-blue-700 transition-colors"
+                        className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition-colors"
                     >
                         Registrar
                     </button>
                 </form>
 
                 {statusMessage && (
-                    <p className={`mt-4 text-center ${statusMessage.includes("Error") ? "text-red-500" : "text-green-500"}`}>
+                    <p className={`text-center font-semibold mt-4 ${statusMessage.includes("Error") ? "text-red-500" : "text-green-500"}`}>
                         {statusMessage}
                     </p>
                 )}

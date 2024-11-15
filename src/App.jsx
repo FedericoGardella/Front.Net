@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import RegisterPaciente from './components/RegisterPaciente';
 import Login from './components/Login';
 import Home from './components/Home';
+import HistoriasClinicas from './components/HistoriasClinicas';
 
 const App = () => {
   const [selectedTab, setSelectedTab] = useState('Location1');
@@ -49,6 +50,7 @@ const App = () => {
                 isAuthenticated ? <RegisterPaciente /> : <Navigate to="/login" />
               }
             />
+            <Route path="/historiasclinicas" element={<HistoriasClinicas />} />
           </Routes>
         </div>
       </div>
