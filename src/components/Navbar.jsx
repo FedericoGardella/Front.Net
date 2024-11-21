@@ -46,6 +46,17 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
             >
               Historias Clínicas
             </Link>
+            {isAuthenticated && (
+              <Link
+                to="/medicamentos"
+                className={`text-lg ${
+                  selectedTab === 'medicamentos' ? 'text-blue-600 font-semibold' : 'text-gray-700'
+                } hover:text-blue-600 transition-colors`}
+                onClick={() => onTabClick('medicamentos')}
+              >
+                Medicamentos
+              </Link>
+            )}
           </div>
         </div>
 
