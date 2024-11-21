@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const HistoriasClinicas = () => {
     const [documento, setDocumento] = useState('');
     const [paciente, setPaciente] = useState(null);
     const [statusMessage, setStatusMessage] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.state?.historiaClinica) {
+            setPaciente(location.state.historiaClinica);
+        }
+    }, [location.state]);
 
     const handleChange = (e) => {
         setDocumento(e.target.value);
@@ -37,7 +44,13 @@ const HistoriasClinicas = () => {
 
     const handleDiagnosticosClick = () => {
         if (paciente) {
-            navigate(`/diagnosticos/${paciente.id}`);
+            navigate(`/diagnosticos/${paciente.id}`, { state: { historiaClinica: paciente } });
+        }
+    };
+
+    const handleResultadosClick = () => {
+        if (paciente) {
+            navigate(`/resultadosestudios/${paciente.id}`, { state: { historiaClinica: paciente } });
         }
     };
 
@@ -84,11 +97,14 @@ const HistoriasClinicas = () => {
                             >
                                 Diagnósticos
                             </button>
-                            <button className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors shadow-md">
-                                Recetas
+                            <button
+                                onClick={handleResultadosClick}
+                                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors shadow-md"
+                            >
+                                Estudios
                             </button>
                             <button className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors shadow-md">
-                                Estudios
+                                Recetas
                             </button>
                         </div>
                     </div>

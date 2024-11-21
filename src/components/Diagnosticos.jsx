@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 
 const Diagnosticos = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation(); // Para obtener el estado pasado desde HistoriasClinicas
   const [diagnosticos, setDiagnosticos] = useState([]);
   const [error, setError] = useState(null);
+
+  const historiaClinica = location.state?.historiaClinica; // Obtiene la historia clínica del estado
 
   useEffect(() => {
     const fetchDiagnosticos = async () => {
@@ -32,11 +36,23 @@ const Diagnosticos = () => {
     fetchDiagnosticos();
   }, [id]);
 
+  const handleBack = () => {
+    navigate('/historiasclinicas', { state: { historiaClinica } }); // Regresa a HistoriasClinicas con el estado
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-cyan-700 to-blue-900 text-gray-800">
       <div className="bg-white shadow-2xl rounded-xl p-10 max-w-4xl w-full h-[80vh] flex flex-col">
-        <h2 className="text-3xl font-bold text-center mb-8 text-blue-800">Diagnósticos del Paciente</h2>
-        
+        <div className="flex justify-between items-center mb-8">
+          <button
+            onClick={handleBack}
+            className="text-blue-800 font-bold text-xl hover:underline"
+          >
+            ← Volver
+          </button>
+          <h2 className="text-3xl font-bold text-center text-blue-800">Diagnósticos del Paciente</h2>
+        </div>
+
         {error ? (
           <p className="text-center text-red-500 font-semibold">{error}</p>
         ) : (
