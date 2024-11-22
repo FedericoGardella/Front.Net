@@ -14,7 +14,7 @@ const Recetas = () => {
     const fetchRecetas = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8084/api/HistoriasClinicas/10007/Recetas`, {
+        const response = await fetch(`http://localhost:8084/api/HistoriasClinicas/${id}/Recetas`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

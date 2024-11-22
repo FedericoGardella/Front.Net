@@ -24,7 +24,7 @@ const HistoriasClinicas = () => {
       if (response.ok) {
         const pacientes = await response.json();
         const pacienteEncontrado = pacientes.find(p => p.documento === documento);
-
+        
         if (pacienteEncontrado) {
           setPaciente(pacienteEncontrado);
           setStatusMessage(null);
@@ -41,22 +41,28 @@ const HistoriasClinicas = () => {
       setPaciente(null);
     }
   };
+  
 
   const handleDiagnosticosClick = () => {
     if (paciente) {
-      navigate(`/diagnosticos/${paciente.id}`, { state: { historiaClinica: paciente } });
+      navigate(`/diagnosticos/${paciente.historiaClinicaId}`, { state: { historiaClinica: paciente } });
     }
   };
+  
 
   const handleResultadosClick = () => {
-    if (paciente) {
-      navigate(`/resultadosestudios/${paciente.id}`, { state: { historiaClinica: paciente } });
+    if (paciente?.historiaClinicaId) {
+      navigate(`/resultadosestudios/${paciente.historiaClinicaId}`, { state: { historiaClinica: paciente } });
+    } else {
+      setStatusMessage("No se puede acceder a los estudios: Historia Clínica no definida.");
     }
   };
 
   const handleRecetasClick = () => {
-    if (paciente) {
-      navigate(`/recetas/${paciente.id}`, { state: { historiaClinica: paciente } });
+    if (paciente?.historiaClinicaId) {
+      navigate(`/recetas/${paciente.historiaClinicaId}`, { state: { historiaClinica: paciente } });
+    } else {
+      setStatusMessage("No se puede acceder a las recetas: Historia Clínica no definida.");
     }
   };
 
@@ -93,7 +99,7 @@ const HistoriasClinicas = () => {
             <div className="grid grid-cols-2 gap-4 text-lg">
               <p><strong>Documento:</strong> {paciente.documento}</p>
               <p><strong>Teléfono:</strong> {paciente.telefono}</p>
-              <p><strong>ID Paciente:</strong> {paciente.id}</p>
+              <p><strong>ID Historia Clínica:</strong> {paciente.historiaClinicaId || "No disponible"}</p>
             </div>
 
             <div className="absolute top-6 right-6 space-x-4 flex">

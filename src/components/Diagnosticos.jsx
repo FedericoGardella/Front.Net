@@ -4,21 +4,21 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 const Diagnosticos = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation(); // Para obtener el estado pasado desde HistoriasClinicas
+  const location = useLocation();
   const [diagnosticos, setDiagnosticos] = useState([]);
   const [error, setError] = useState(null);
 
-  const historiaClinica = location.state?.historiaClinica; // Obtiene la historia clínica del estado
+  const historiaClinica = location.state?.historiaClinica;
 
   useEffect(() => {
     const fetchDiagnosticos = async () => {
       try {
-        const token = localStorage.getItem('token'); // Obtén el token del localStorage
-        const response = await fetch(`http://localhost:8084/api/HistoriasClinicas/10007/Diagnosticos`, { //Harcodeada la HistoriaClinica 10007, enviar el id de la historia clinica del paciente
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:8084/api/HistoriasClinicas/${id}/Diagnosticos`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`, // Agrega el token como encabezado
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -33,11 +33,17 @@ const Diagnosticos = () => {
       }
     };
 
-    fetchDiagnosticos();
+    if (id) {
+      fetchDiagnosticos();
+    }
   }, [id]);
 
   const handleBack = () => {
-    navigate('/historiasclinicas', { state: { historiaClinica } }); // Regresa a HistoriasClinicas con el estado
+    navigate('/historiasclinicas', { state: { historiaClinica } });
+  };
+
+  const handleCreate = () => {
+    navigate(`/diagnosticos/${id}/create`, { state: { historiaClinica } });
   };
 
   return (
@@ -51,6 +57,12 @@ const Diagnosticos = () => {
             ← Volver
           </button>
           <h2 className="text-3xl font-bold text-center text-blue-800">Diagnósticos del Paciente</h2>
+          <button
+            onClick={handleCreate}
+            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors shadow-md"
+          >
+            + Nuevo Diagnóstico
+          </button>
         </div>
 
         {error ? (

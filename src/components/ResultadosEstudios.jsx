@@ -4,7 +4,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 const ResultadosEstudios = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();
   const [resultados, setResultados] = useState([]);
   const [error, setError] = useState(null);
 
@@ -14,7 +14,7 @@ const ResultadosEstudios = () => {
     const fetchResultados = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8084/api/HistoriasClinicas/10007/ResultadoEstudios`, { // Harcodeada la HistoriaClinica 10007, enviar el id de la historia clínica del paciente
+        const response = await fetch(`http://localhost:8084/api/HistoriasClinicas/${id}/ResultadoEstudios`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -37,7 +37,11 @@ const ResultadosEstudios = () => {
   }, [id]);
 
   const handleBack = () => {
-    navigate('/historiasclinicas', { state: { historiaClinica } }); // Regresa a HistoriasClinicas con el estado
+    navigate('/historiasclinicas', { state: { historiaClinica } });
+  };
+
+  const handleCreate = () => {
+    navigate(`/resultadosestudios/${id}/create`, { state: { historiaClinica } });
   };
 
   return (
@@ -51,6 +55,12 @@ const ResultadosEstudios = () => {
             ← Volver
           </button>
           <h2 className="text-3xl font-bold text-center text-green-800">Resultados de Estudios del Paciente</h2>
+          <button
+            onClick={handleCreate}
+            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors shadow-md"
+          >
+            + Nuevo Resultado
+          </button>
         </div>
 
         {error ? (

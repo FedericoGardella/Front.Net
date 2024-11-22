@@ -9,6 +9,8 @@ import Diagnosticos from './components/Diagnosticos';
 import ResultadosEstudios from './components/ResultadosEstudios';
 import Medicamentos from './components/Medicamentos';
 import Recetas from './components/Recetas';
+import CrearDiagnostico from './components/CrearDiagnostico';
+import CrearResultadoEstudio from './components/CrearResultadoEstudio';
 
 const App = () => {
   const [selectedTab, setSelectedTab] = useState('Location1');
@@ -59,6 +61,8 @@ const App = () => {
             <Route path="/resultadosestudios/:id" element={<ResultadosEstudios/>} />
             <Route path="/medicamentos" element={<Medicamentos />} />
             <Route path="/recetas/:id" element={<Recetas />} />
+            <Route path="/diagnosticos/:id/create" element={<CrearDiagnostico />} />
+            <Route path="/resultadosestudios/:id/create" element={<CrearResultadoEstudio />} />
           </Routes>
         </div>
       </div>
