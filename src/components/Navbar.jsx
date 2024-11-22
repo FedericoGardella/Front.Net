@@ -2,10 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
+  const role = localStorage.getItem('role'); // Obtén el rol del localStorage
+
   return (
     <nav className="bg-white shadow-md px-8 py-4">
       <div className="container mx-auto flex justify-between items-center">
-        
+
         {/* Logo / Inicio */}
         <div className="flex items-center space-x-6">
           <Link
@@ -26,36 +28,51 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
             >
               Inicio
             </Link>
-            {isAuthenticated && (
-              <Link
-                to="/create-user"
-                className={`text-lg ${
-                  selectedTab === 'create-user' ? 'text-blue-600 font-semibold' : 'text-gray-700'
-                } hover:text-blue-600 transition-colors`}
-                onClick={() => onTabClick('create-user')}
-              >
-                Registrar Paciente
-              </Link>
+            {/* Opciones para ADMIN */}
+            {isAuthenticated && role === 'ADMIN' && (
+              <>
+                <Link
+                  to="/create-user"
+                  className={`text-lg ${
+                    selectedTab === 'create-user' ? 'text-blue-600 font-semibold' : 'text-gray-700'
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick('create-user')}
+                >
+                  Registrar Paciente
+                </Link>
+                <Link
+                  to="/medicamentos"
+                  className={`text-lg ${
+                    selectedTab === 'medicamentos' ? 'text-blue-600 font-semibold' : 'text-gray-700'
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick('medicamentos')}
+                >
+                  Medicamentos
+                </Link>
+              </>
             )}
-            <Link
-              to="/historiasclinicas"
-              className={`text-lg ${
-                selectedTab === 'historiasclinicas' ? 'text-blue-600 font-semibold' : 'text-gray-700'
-              } hover:text-blue-600 transition-colors`}
-              onClick={() => onTabClick('historiasclinicas')}
-            >
-              Historias Clínicas
-            </Link>
-            {isAuthenticated && (
-              <Link
-                to="/medicamentos"
-                className={`text-lg ${
-                  selectedTab === 'medicamentos' ? 'text-blue-600 font-semibold' : 'text-gray-700'
-                } hover:text-blue-600 transition-colors`}
-                onClick={() => onTabClick('medicamentos')}
-              >
-                Medicamentos
-              </Link>
+            {/* Opciones para MEDICO */}
+            {isAuthenticated && role === 'MEDICO' && (
+              <>
+                <Link
+                  to="/historiasclinicas"
+                  className={`text-lg ${
+                    selectedTab === 'historiasclinicas' ? 'text-blue-600 font-semibold' : 'text-gray-700'
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick('historiasclinicas')}
+                >
+                  Historias Clínicas
+                </Link>
+                <Link
+                  to="/citashoy"
+                  className={`text-lg ${
+                    selectedTab === 'citas-hoy' ? 'text-blue-600 font-semibold' : 'text-gray-700'
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick('citas-hoy')}
+                >
+                  Citas de Hoy
+                </Link>
+              </>
             )}
           </div>
         </div>

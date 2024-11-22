@@ -28,10 +28,12 @@ const Login = ({ onLogin }) => {
       }
 
       const data = await response.json();
-      
-      // Almacena el token en localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data));
+
+      // Guardar datos en localStorage
+      localStorage.setItem('token', data.token); // Token de autenticación
+      localStorage.setItem('documento', data.documento); // Número de documento
+      localStorage.setItem('idUsuario', data.idUsuario); // ID del usuario
+      localStorage.setItem('role', data.roles[0]); // Primer (y único) rol del usuario
 
       // Actualizar estado de autenticación
       onLogin();
@@ -47,7 +49,7 @@ const Login = ({ onLogin }) => {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-cyan-700 to-blue-900 text-gray-800">
       <div className="bg-white shadow-2xl rounded-xl p-10 max-w-md w-full">
         <h2 className="text-3xl font-bold text-center mb-6 text-blue-800">Iniciar Sesión</h2>
-        
+
         <form onSubmit={handleSubmit} className="space-y-6" autoComplete="off">
           <input
             type="text"
