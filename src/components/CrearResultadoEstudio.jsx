@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 const CrearResultadoEstudio = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const documento = location.state?.documento; // Recibimos el documento
+  const historiaClinica = location.state?.historiaClinica; // Recibimos la historia clínica
+
   const [descripcion, setDescripcion] = useState('');
   const [error, setError] = useState(null);
 
@@ -34,14 +39,14 @@ const CrearResultadoEstudio = () => {
         throw new Error('Error al guardar el resultado de estudio');
       }
 
-      navigate(`/resultadosestudios/${id}`);
+      navigate(`/resultadosestudios/${id}`, { state: { documento, historiaClinica } });
     } catch (error) {
       setError(error.message);
     }
   };
 
   const handleCancel = () => {
-    navigate(`/resultadosestudios/${id}`);
+    navigate(`/resultadosestudios/${id}`, { state: { documento, historiaClinica } });
   };
 
   return (

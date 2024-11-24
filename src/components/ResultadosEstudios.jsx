@@ -8,7 +8,8 @@ const ResultadosEstudios = () => {
   const [resultados, setResultados] = useState([]);
   const [error, setError] = useState(null);
 
-  const historiaClinica = location.state?.historiaClinica;
+  const documento = location.state?.documento; // Obtenemos el documento si está disponible
+  const historiaClinica = location.state?.historiaClinica; // Obtenemos la historia clínica si está disponible
 
   useEffect(() => {
     const fetchResultados = async () => {
@@ -37,11 +38,15 @@ const ResultadosEstudios = () => {
   }, [id]);
 
   const handleBack = () => {
-    navigate('/historiasclinicas', { state: { historiaClinica } });
+    if (historiaClinica) {
+      navigate(`/consultas/${id}`, { state: { historia: historiaClinica, documento } });
+    } else {
+      setError('No se puede volver porque falta información de la consulta.');
+    }
   };
 
   const handleCreate = () => {
-    navigate(`/resultadosestudios/${id}/create`, { state: { historiaClinica } });
+    navigate(`/resultadosestudios/${id}/create`, { state: { documento, historiaClinica } });
   };
 
   return (
@@ -50,11 +55,12 @@ const ResultadosEstudios = () => {
         <div className="flex justify-between items-center mb-8">
           <button
             onClick={handleBack}
-            className="text-green-800 font-bold text-xl hover:underline"
+            className="flex items-center text-green-800 font-bold text-xl hover:underline"
           >
-            ← Volver
+            <span className="mr-2">←</span>
+            <span>Volver</span>
           </button>
-          <h2 className="text-3xl font-bold text-center text-green-800">Resultados de Estudios del Paciente</h2>
+          <h2 className="text-2xl font-bold text-center text-green-800">{`Resultados de estudios de la consulta n. ${historiaClinica?.id || id}`}</h2>
           <button
             onClick={handleCreate}
             className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors shadow-md"

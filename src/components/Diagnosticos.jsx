@@ -8,6 +8,7 @@ const Diagnosticos = () => {
   const [diagnosticos, setDiagnosticos] = useState([]);
   const [error, setError] = useState(null);
 
+  const documento = location.state?.documento;
   const historiaClinica = location.state?.historiaClinica;
 
   useEffect(() => {
@@ -39,11 +40,15 @@ const Diagnosticos = () => {
   }, [id]);
 
   const handleBack = () => {
-    navigate('/historiasclinicas', { state: { historiaClinica } });
+    if (historiaClinica) {
+      navigate(`/consultas/${historiaClinica.id}`, { state: { historia: historiaClinica, documento } });
+    } else {
+      setError('No se puede volver porque falta información de la consulta.');
+    }
   };
 
   const handleCreate = () => {
-    navigate(`/diagnosticos/${id}/create`, { state: { historiaClinica } });
+    navigate(`/diagnosticos/${id}/create`, { state: { documento, historiaClinica } });
   };
 
   return (
@@ -52,11 +57,12 @@ const Diagnosticos = () => {
         <div className="flex justify-between items-center mb-8">
           <button
             onClick={handleBack}
-            className="text-blue-800 font-bold text-xl hover:underline"
+            className="flex items-center text-blue-800 font-bold text-xl hover:underline"
           >
-            ← Volver
+            <span className="mr-2">←</span>
+            <span>Volver</span>
           </button>
-          <h2 className="text-3xl font-bold text-center text-blue-800">Diagnósticos del Paciente</h2>
+          <h2 className="text-3xl font-bold text-center text-blue-800">{`Diagnósticos de la consulta n. ${historiaClinica?.id || id}`}</h2>
           <button
             onClick={handleCreate}
             className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors shadow-md"

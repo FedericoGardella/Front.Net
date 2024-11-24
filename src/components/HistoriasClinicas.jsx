@@ -3,17 +3,19 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 const HistoriasClinicas = () => {
   const [documento, setDocumento] = useState('');
-  const [paciente, setPaciente] = useState(null);
+  const [historias, setHistorias] = useState([]);
   const [statusMessage, setStatusMessage] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    const pacienteId = location.state?.pacienteId;
-    if (pacienteId) {
-      handleSearchByDocumento(pacienteId);
+    // Recuperamos el documento si se regresa desde otro componente
+    const documentoRecibido = location.state?.documento;
+    if (documentoRecibido) {
+      setDocumento(documentoRecibido);
+      handleSearchByDocumento(documentoRecibido); // Busca automáticamente
     }
-  }, [location.state]);  
+  }, [location.state]);
 
   const handleChange = (e) => {
     setDocumento(e.target.value);
@@ -21,53 +23,43 @@ const HistoriasClinicas = () => {
 
   const handleSearchByDocumento = async (doc) => {
     try {
-      const response = await fetch('http://localhost:8084/api/HistoriasClinicas/MockPacientes');
-      if (response.ok) {
-        const pacientes = await response.json();
-  
-        const pacienteEncontrado = pacientes.find(
-          (p) => String(p.documento) === String(doc) // Normaliza ambos valores a cadenas
-        );
-  
-        if (pacienteEncontrado) {
-          setPaciente(pacienteEncontrado);
-          setStatusMessage(null);
-          setDocumento(pacienteEncontrado.documento); // Actualiza el campo de búsqueda
-        } else {
-          setPaciente(null);
-          setStatusMessage('Paciente no encontrado');
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`http://localhost:8084/api/HistoriasClinicas/${doc}/HistoriasXDocumento`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('No autorizado: verifica tu token.');
         }
-      } else {
-        setStatusMessage('Error al obtener los datos de pacientes');
-        setPaciente(null);
+        if (response.status === 404) {
+          throw new Error('No se encontraron historias clínicas para este documento.');
+        }
+        throw new Error('Error al obtener las historias clínicas.');
       }
+
+      const data = await response.json();
+
+      // Ordenar historias por fecha, de más reciente a más antigua
+      const historiasOrdenadas = data.sort(
+        (a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion)
+      );
+
+      setHistorias(historiasOrdenadas);
+      setStatusMessage(null);
     } catch (error) {
-      setStatusMessage("Error al buscar el paciente");
-      setPaciente(null);
-    }
-  };  
-  
-
-  const handleDiagnosticosClick = () => {
-    if (paciente) {
-      navigate(`/diagnosticos/${paciente.historiaClinicaId}`, { state: { historiaClinica: paciente } });
+      setStatusMessage(error.message);
+      setHistorias([]);
     }
   };
 
-  const handleResultadosClick = () => {
-    if (paciente?.historiaClinicaId) {
-      navigate(`/resultadosestudios/${paciente.historiaClinicaId}`, { state: { historiaClinica: paciente } });
-    } else {
-      setStatusMessage('No se puede acceder a los estudios: Historia Clínica no definida.');
-    }
-  };
-
-  const handleRecetasClick = () => {
-    if (paciente?.historiaClinicaId) {
-      navigate(`/recetas/${paciente.historiaClinicaId}`, { state: { historiaClinica: paciente } });
-    } else {
-      setStatusMessage('No se puede acceder a las recetas: Historia Clínica no definida.');
-    }
+  const handleViewClick = (historia) => {
+    navigate(`/consultas/${historia.id}`, { state: { historia, documento } });
   };
 
   return (
@@ -97,37 +89,33 @@ const HistoriasClinicas = () => {
           )}
         </div>
 
-        {paciente && (
-          <div className="p-6 bg-blue-50 border border-blue-200 rounded-xl relative">
-            <h3 className="text-xl font-bold text-blue-700 mb-6">
-              Historia Clínica de: <span className="font-normal text-gray-800">{paciente.nombres} {paciente.apellidos}</span>
-            </h3>
-            <div className="grid grid-cols-2 gap-4 text-lg">
-              <p><strong>Documento:</strong> {paciente.documento}</p>
-              <p><strong>Teléfono:</strong> {paciente.telefono}</p>
-              <p><strong>ID Historia Clínica:</strong> {paciente.historiaClinicaId || 'No disponible'}</p>
+        {historias.length > 0 && (
+          <div className="relative bg-blue-50 border border-blue-200 rounded-xl overflow-y-auto max-h-[60vh]">
+            <div className="sticky top-0 bg-blue-50 z-10 p-4 border-b border-blue-300">
+              <h3 className="text-xl font-bold text-blue-700">
+                Historia Clínica de {historias[0].pacienteNombres} {historias[0].pacienteApellidos}
+              </h3>
             </div>
-
-            <div className="absolute top-6 right-6 space-x-4 flex">
-              <button
-                onClick={handleDiagnosticosClick}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors shadow-md"
-              >
-                Diagnósticos
-              </button>
-              <button
-                onClick={handleResultadosClick}
-                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors shadow-md"
-              >
-                Estudios
-              </button>
-              <button
-                onClick={handleRecetasClick}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors shadow-md"
-              >
-                Recetas
-              </button>
-            </div>
+            <ul className="list-disc pl-6">
+              {historias.map((historia) => (
+                <li key={historia.id} className="flex justify-between items-center mb-4">
+                  <div>
+                    <p className="font-bold text-lg text-blue-600">
+                      ID de Consulta: {historia.id}
+                    </p>
+                    <p><strong>Fecha de Creación:</strong> {new Date(historia.fechaCreacion).toLocaleDateString()}</p>
+                    <p><strong>Médico:</strong> {historia.nombreMedico || 'No disponible'}</p>
+                    <p><strong>Número de Cita:</strong> {historia.citaId || 'No disponible'}</p>
+                  </div>
+                  <button
+                    onClick={() => handleViewClick(historia)}
+                    className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
+                  >
+                    Ver
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>

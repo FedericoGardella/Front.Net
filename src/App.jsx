@@ -12,6 +12,7 @@ import Recetas from './components/Recetas';
 import CrearDiagnostico from './components/CrearDiagnostico';
 import CrearResultadoEstudio from './components/CrearResultadoEstudio';
 import CitasHoy from './components/CitasHoy';
+import ConsultaDetail from './components/ConsultaDetail';
 
 const App = () => {
   const [selectedTab, setSelectedTab] = useState('Location1');
@@ -40,7 +41,7 @@ const App = () => {
   return (
     <Router>
       <div className="overflow-x-hidden h-screen flex flex-col">
-        <div className="flex-grow bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
+        <div className="flex-grow bg-gradient-to-r from-cyan-700 to-blue-900">
           <Navbar
             selectedTab={selectedTab}
             onTabClick={handleTabClick}
@@ -65,6 +66,7 @@ const App = () => {
             <Route path="/diagnosticos/:id/create" element={<CrearDiagnostico />} />
             <Route path="/resultadosestudios/:id/create" element={<CrearResultadoEstudio />} />
             <Route path="/citashoy" element={<CitasHoy />} />
+            <Route path="/consultas/:id" element={<ConsultaDetail />} />
           </Routes>
         </div>
       </div>

@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 const CrearDiagnostico = () => {
   const { id } = useParams(); // Obtiene el id de la historia clínica desde la URL
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const documento = location.state?.documento; // Obtenemos el documento del paciente
+  const historiaClinica = location.state?.historiaClinica; // Obtenemos la historia clínica
 
   const [descripcion, setDescripcion] = useState('');
   const [error, setError] = useState(null);
@@ -35,14 +39,16 @@ const CrearDiagnostico = () => {
         throw new Error('Error al guardar el diagnóstico');
       }
 
-      navigate(`/diagnosticos/${id}`);
+      // Navegamos a Diagnosticos con los estados necesarios
+      navigate(`/diagnosticos/${id}`, { state: { documento, historiaClinica } });
     } catch (error) {
       setError(error.message);
     }
   };
 
   const handleCancel = () => {
-    navigate(`/diagnosticos/${id}`);
+    // Navegamos a Diagnosticos con los estados necesarios
+    navigate(`/diagnosticos/${id}`, { state: { documento, historiaClinica } });
   };
 
   return (

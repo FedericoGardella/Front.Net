@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const CitasHoy = () => {
@@ -10,9 +10,9 @@ const CitasHoy = () => {
   useEffect(() => {
     const fetchCitasHoy = async () => {
       try {
-        const token = localStorage.getItem('token'); // Obtiene el token del localStorage
-        const medicoId = localStorage.getItem('idUsuario'); // Obtiene el id del médico del localStorage
-        const today = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+        const token = localStorage.getItem('token');
+        const medicoId = localStorage.getItem('idUsuario');
+        const today = new Date().toISOString().split('T')[0];
 
         if (!medicoId) {
           throw new Error('No se encontró el ID del médico en el localStorage.');
@@ -49,8 +49,8 @@ const CitasHoy = () => {
     fetchCitasHoy();
   }, []);
 
-  const handleCitaClick = (pacienteId) => {
-    navigate('/historiasclinicas', { state: { pacienteId } });
+  const handleCitaClick = (pacienteId, documento) => {
+    navigate('/historiasclinicas', { state: { documento: pacienteId } });
   };
 
   if (loading) {
@@ -62,7 +62,17 @@ const CitasHoy = () => {
   }
 
   if (!grupoCitas) {
-    return <p className="text-center text-gray-500">No hay citas para hoy.</p>;
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-100 text-gray-800">
+        <div className="bg-white shadow-md rounded-xl p-10 text-center">
+          <h2 className="text-3xl font-bold text-blue-800 mb-4">Citas de Hoy</h2>
+          <p className="text-lg text-gray-600">No hay citas programadas para hoy.</p>
+          <p className="mt-4 text-gray-500">
+            Revisa el calendario o vuelve más tarde para consultar nuevas actualizaciones.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -70,18 +80,30 @@ const CitasHoy = () => {
       <div className="bg-white shadow-2xl rounded-xl p-6 max-w-4xl w-full">
         <h2 className="text-3xl font-bold text-center mb-8 text-blue-800">Citas de Hoy</h2>
         <div className="space-y-4">
-          <p><strong>Lugar:</strong> {grupoCitas.lugar}</p>
-          <p><strong>Fecha:</strong> {new Date(grupoCitas.fecha).toLocaleDateString()}</p>
+          <p>
+            <strong>Lugar:</strong> {grupoCitas.lugar}
+          </p>
+          <p>
+            <strong>Fecha:</strong> {new Date(grupoCitas.fecha).toLocaleDateString()}
+          </p>
           <h3 className="text-2xl font-bold text-blue-700">Citas:</h3>
           <ul className="list-disc pl-6">
             {grupoCitas.citas.map((cita) => (
               <li
                 key={cita.id}
                 className="mb-4 cursor-pointer text-blue-600 hover:underline"
-                onClick={() => handleCitaClick(cita.pacienteId)}
+                onClick={() => handleCitaClick(cita.pacienteId, cita.documento)}
               >
-                <p><strong>Paciente:</strong> {cita.pacienteId}</p>
-                <p><strong>Hora:</strong> {new Date(`1970-01-01T${cita.hora}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                <p>
+                  <strong>Paciente:</strong> {cita.pacienteId}
+                </p>
+                <p>
+                  <strong>Hora:</strong>{' '}
+                  {new Date(`1970-01-01T${cita.hora}`).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </p>
               </li>
             ))}
           </ul>
@@ -92,4 +114,3 @@ const CitasHoy = () => {
 };
 
 export default CitasHoy;
-
