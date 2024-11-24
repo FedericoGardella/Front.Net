@@ -8,8 +8,12 @@ const HistoriasClinicas = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Verifica si la navegación proviene de CitasHoy
+  const desdeCitasHoy = location.state?.desdeCitasHoy || false;
+  const citaId = location.state?.citaId || null; // Recibe citaId si está disponible
+  const pacienteId = location.state?.pacienteId || null;
+
   useEffect(() => {
-    // Recuperamos el documento si se regresa desde otro componente
     const documentoRecibido = location.state?.documento;
     if (documentoRecibido) {
       setDocumento(documentoRecibido);
@@ -62,6 +66,11 @@ const HistoriasClinicas = () => {
     navigate(`/consultas/${historia.id}`, { state: { historia, documento } });
   };
 
+  const handleAddHistoriaClinica = () => {
+    // Navegar a ConsultasCreate con documento y citaId
+    navigate('/consultascreate', { state: { documento, citaId, pacienteId } });
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-cyan-700 to-blue-900 text-white">
       <div className="bg-white shadow-2xl rounded-xl p-10 max-w-4xl w-full h-[80vh] flex flex-col justify-start text-gray-800">
@@ -91,10 +100,19 @@ const HistoriasClinicas = () => {
 
         {historias.length > 0 && (
           <div className="relative bg-blue-50 border border-blue-200 rounded-xl overflow-y-auto max-h-[60vh]">
-            <div className="sticky top-0 bg-blue-50 z-10 p-4 border-b border-blue-300">
+            <div className="sticky top-0 bg-blue-50 z-10 p-4 border-b border-blue-300 flex justify-between items-center">
               <h3 className="text-xl font-bold text-blue-700">
                 Historia Clínica de {historias[0].pacienteNombres} {historias[0].pacienteApellidos}
               </h3>
+              {/* Botón para agregar nueva historia clínica */}
+              {desdeCitasHoy && (
+                <button
+                  onClick={handleAddHistoriaClinica}
+                  className="bg-cyan-500 text-white px-4 py-2 rounded-md hover:bg-cyan-600 transition-colors"
+                >
+                  + Agregar Consulta
+                </button>
+              )}
             </div>
             <ul className="list-disc pl-6">
               {historias.map((historia) => (
@@ -109,7 +127,7 @@ const HistoriasClinicas = () => {
                   </div>
                   <button
                     onClick={() => handleViewClick(historia)}
-                    className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
                   >
                     Ver
                   </button>

@@ -5,6 +5,7 @@ const CitasHoy = () => {
   const [grupoCitas, setGrupoCitas] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [pacientesInfo, setPacientesInfo] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,6 +39,10 @@ const CitasHoy = () => {
         } else {
           const data = await response.json();
           setGrupoCitas(data);
+
+          // Obtener información de los pacientes
+          const pacientes = await fetchPacientesInfo(data.citas);
+          setPacientesInfo(pacientes);
         }
       } catch (error) {
         setError(error.message);
@@ -49,8 +54,64 @@ const CitasHoy = () => {
     fetchCitasHoy();
   }, []);
 
-  const handleCitaClick = (pacienteId, documento) => {
-    navigate('/historiasclinicas', { state: { documento: pacienteId } });
+  const fetchPacientesInfo = async (citas) => {
+    const token = localStorage.getItem('token');
+    const pacientes = {};
+
+    await Promise.all(
+      citas.map(async (cita) => {
+        try {
+          const response = await fetch(
+            `http://localhost:8084/api/HandlerCitas/${cita.pacienteId}/GetPaciente`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (response.ok) {
+            const pacienteData = await response.json();
+            pacientes[cita.pacienteId] = `${pacienteData.nombres} ${pacienteData.apellidos} (${pacienteData.documento})`;
+          } else {
+            pacientes[cita.pacienteId] = 'Paciente desconocido';
+          }
+        } catch {
+          pacientes[cita.pacienteId] = 'Paciente desconocido';
+        }
+      })
+    );
+
+    return pacientes;
+  };
+
+  const handleCitaClick = async (pacienteId, citaId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:8084/api/HandlerCitas/${pacienteId}/GetPaciente`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al obtener el documento del paciente');
+      }
+
+      const pacienteData = await response.json();
+
+      // Navegar a HistoriasClinicas con el documento y citaId
+      navigate('/historiasclinicas', {
+        state: { documento: pacienteData.documento, desdeCitasHoy: true, citaId, pacienteId },
+      });
+    } catch (error) {
+      console.error('Error al obtener el documento del paciente:', error);
+      setError('No se pudo obtener el documento del paciente.');
+    }
   };
 
   if (loading) {
@@ -92,10 +153,11 @@ const CitasHoy = () => {
               <li
                 key={cita.id}
                 className="mb-4 cursor-pointer text-blue-600 hover:underline"
-                onClick={() => handleCitaClick(cita.pacienteId, cita.documento)}
+                onClick={() => handleCitaClick(cita.pacienteId, cita.id)}
               >
                 <p>
-                  <strong>Paciente:</strong> {cita.pacienteId}
+                  <strong>Paciente:</strong>{' '}
+                  {pacientesInfo[cita.pacienteId] || 'Cargando información del paciente...'}
                 </p>
                 <p>
                   <strong>Hora:</strong>{' '}

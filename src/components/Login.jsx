@@ -34,6 +34,7 @@ const Login = ({ onLogin }) => {
       localStorage.setItem('documento', data.documento); // Número de documento
       localStorage.setItem('idUsuario', data.idUsuario); // ID del usuario
       localStorage.setItem('role', data.roles[0]); // Primer (y único) rol del usuario
+      localStorage.setItem('nombre', data.nombre); // Nombre del usuario
 
       // Actualizar estado de autenticación
       onLogin();
