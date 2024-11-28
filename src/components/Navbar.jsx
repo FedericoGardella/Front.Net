@@ -74,6 +74,21 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
                 </Link>
               </>
             )}
+
+            {/* Opciones para PACIENTE */}
+            {isAuthenticated && role === "PACIENTE" && (
+              <Link
+                to="/modulo-consulta"
+                className={`text-lg ${
+                  selectedTab === "modulo-consulta"
+                    ? "text-blue-600 font-semibold"
+                    : "text-gray-700"
+                } hover:text-blue-600 transition-colors`}
+                onClick={() => onTabClick("modulo-consulta")}
+              >
+                Mi Última Consulta
+              </Link>
+            )}
           </div>
         </div>
 

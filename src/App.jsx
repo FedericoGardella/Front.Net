@@ -15,6 +15,7 @@ import CitasHoy from './components/CitasHoy';
 import ConsultaDetail from './components/ConsultaDetail';
 import ConsultaCreate from './components/ConsultaCreate';
 import CrearReceta from './components/CrearReceta';
+import ModuloConsulta from './components/ModuloConsulta';
 
 const App = () => {
   const [selectedTab, setSelectedTab] = useState('Location1');
@@ -71,6 +72,7 @@ const App = () => {
             <Route path="/citashoy" element={<CitasHoy />} />
             <Route path="/consultas/:id" element={<ConsultaDetail />} />
             <Route path="/consultascreate" element={<ConsultaCreate />} />
+            <Route path="/modulo-consulta" element={<ModuloConsulta />} />
           </Routes>
         </div>
       </div>
