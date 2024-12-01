@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const CalendarioGruposCitas = () => {
   const [mesActual, setMesActual] = useState(new Date().getMonth()); // Índice del mes actual
@@ -7,6 +8,8 @@ const CalendarioGruposCitas = () => {
   const [mesSeleccionado, setMesSeleccionado] = useState(mesActual);
   const [especialidadId, setEspecialidadId] = useState('');
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   const meses = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -74,6 +77,15 @@ const CalendarioGruposCitas = () => {
     cargarGruposCitas(mesSeleccionado); // Cargar datos iniciales para el mes actual
   };
 
+  const handleDiaClick = (dia) => {
+    const grupoCita = gruposCitas.find(
+      (grupo) => new Date(grupo.fecha).getDate() === dia
+    );
+    if (grupoCita) {
+      navigate(`/grupos-citas/${grupoCita.id}`);
+    }
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-700 to-teal-900 text-gray-800">
       <div className="bg-white shadow-2xl rounded-xl p-10 max-w-4xl w-full space-y-6">
@@ -130,18 +142,22 @@ const CalendarioGruposCitas = () => {
             </div>
 
             <div className="grid grid-cols-7 gap-2 mt-6">
-              {diasMes.map((dia) => (
-                <div
-                  key={dia}
-                  className={`text-center py-3 rounded-lg font-semibold ${
-                    verificarCitasPorDia(dia)
-                      ? 'bg-green-500 text-white'
-                      : 'bg-red-500 text-white'
-                  }`}
-                >
-                  {dia}
-                </div>
-              ))}
+              {diasMes.map((dia) => {
+                const tieneCitas = verificarCitasPorDia(dia);
+                return (
+                  <div
+                    key={dia}
+                    className={`text-center py-3 rounded-lg font-semibold cursor-pointer ${
+                      tieneCitas
+                        ? 'bg-green-500 text-white hover:bg-green-700'
+                        : 'bg-red-500 text-white cursor-not-allowed'
+                    }`}
+                    onClick={() => tieneCitas && handleDiaClick(dia)}
+                  >
+                    {dia}
+                  </div>
+                );
+              })}
             </div>
           </>
         )}

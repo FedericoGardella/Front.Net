@@ -18,6 +18,7 @@ import CrearReceta from './components/CrearReceta';
 import ModuloConsulta from './components/ModuloConsulta';
 import GruposCitasCreate from './components/GruposCitasCreate';
 import CalendarioGruposCitas from './components/CalendarioGruposCitas';
+import DetalleGrupoCitas from './components/DetalleGrupoCitas';
 
 const App = () => {
   const [selectedTab, setSelectedTab] = useState('Location1');
@@ -77,6 +78,7 @@ const App = () => {
             <Route path="/modulo-consulta" element={<ModuloConsulta />} />
             <Route path="/gruposcitas-create" element={<GruposCitasCreate />} />
             <Route path="/calendariocitas" element={<CalendarioGruposCitas />} />
+            <Route path="/grupos-citas/:id" element={<DetalleGrupoCitas />} />
           </Routes>
         </div>
       </div>
