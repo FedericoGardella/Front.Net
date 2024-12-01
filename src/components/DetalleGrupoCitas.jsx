@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const DetalleGrupoCitas = () => {
-  const { grupoCitaId } = useParams(); // Obtiene el ID del grupo de citas desde la URL
+  const { id } = useParams(); // Obtiene el ID del grupo de citas desde la URL
   const navigate = useNavigate();
 
   const [grupoCita, setGrupoCita] = useState(null);
@@ -16,7 +16,7 @@ const DetalleGrupoCitas = () => {
         setError(null);
         setLoading(true);
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8084/api/grupos-citas/${grupoCitaId}`, {
+        const response = await fetch(`http://localhost:8083/api/GruposCitas/detalle/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ const DetalleGrupoCitas = () => {
 
         const data = await response.json();
         setGrupoCita(data);
-        setCitas(data.citas); // Las citas vienen como parte del grupo de citas
+        setCitas(data.citas || []); // Asegúrate de manejar citas como un array
       } catch (error) {
         setError(error.message);
       } finally {
@@ -39,7 +39,7 @@ const DetalleGrupoCitas = () => {
     };
 
     fetchGrupoCita();
-  }, [grupoCitaId]);
+  }, [id]);
 
   const handleBack = () => {
     navigate(-1); // Regresa a la página anterior
@@ -95,16 +95,28 @@ const DetalleGrupoCitas = () => {
             </tr>
           </thead>
           <tbody>
-            {citas.map((cita, index) => (
-              <tr
-                key={index}
-                className="hover:bg-gray-100 transition-colors"
-              >
-                <td className="border border-gray-300 px-4 py-2">
-                  {new Date(cita.hora).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </td>
-              </tr>
-            ))}
+            {citas.map((cita, index) => {
+              // Combinar la fecha del grupo con la hora de la cita
+              const citaHoraCompleta = `${grupoCita.fecha.split('T')[0]}T${cita.hora}`;
+              const citaHora = new Date(citaHoraCompleta);
+
+              // Determinar clases CSS según si hay pacienteId
+              const claseFila =
+                cita.pacienteId === null
+                  ? 'bg-green-200 hover:bg-green-300'
+                  : 'bg-red-200 hover:bg-red-300';
+
+              return (
+                <tr
+                  key={index}
+                  className={`${claseFila} transition-colors`}
+                >
+                  <td className="border border-gray-300 px-4 py-2">
+                    {citaHora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

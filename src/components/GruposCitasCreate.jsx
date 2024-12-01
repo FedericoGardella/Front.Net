@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const GruposCitasCreate = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +11,59 @@ const GruposCitasCreate = () => {
     intervaloMinutos: '',
   });
 
+  const [especialidades, setEspecialidades] = useState([]);
+  const [medicos, setMedicos] = useState([]);
   const [statusMessage, setStatusMessage] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const cargarEspecialidades = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:8081/api/Especialidades', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al obtener las especialidades.');
+        }
+
+        const data = await response.json();
+        setEspecialidades(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    const cargarMedicos = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:8082/api/Medicos', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al obtener los médicos.');
+        }
+
+        const data = await response.json();
+        setMedicos(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    cargarEspecialidades();
+    cargarMedicos();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -73,6 +125,8 @@ const GruposCitasCreate = () => {
       <div className="bg-white shadow-2xl rounded-xl p-10 max-w-2xl w-full space-y-6">
         <h2 className="text-3xl font-bold text-center text-blue-800 mb-4">Crear Grupo de Citas</h2>
 
+        {error && <p className="text-red-500 text-center font-semibold">{error}</p>}
+
         <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
@@ -92,24 +146,34 @@ const GruposCitasCreate = () => {
               required
               className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100"
             />
-            <input
-              type="number"
+            <select
               name="medicoId"
-              placeholder="ID del Médico"
               value={formData.medicoId}
               onChange={handleChange}
               required
               className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100"
-            />
-            <input
-              type="number"
+            >
+              <option value="">Seleccione un Médico</option>
+              {medicos.map((medico) => (
+                <option key={medico.id} value={medico.id}>
+                  {medico.apellidos}, {medico.nombres}
+                </option>
+              ))}
+            </select>
+            <select
               name="especialidadId"
-              placeholder="ID de la Especialidad"
               value={formData.especialidadId}
               onChange={handleChange}
               required
               className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100"
-            />
+            >
+              <option value="">Seleccione una Especialidad</option>
+              {especialidades.map((especialidad) => (
+                <option key={especialidad.id} value={especialidad.id}>
+                  {especialidad.nombre}
+                </option>
+              ))}
+            </select>
             <input
               type="time"
               name="horaInicio"

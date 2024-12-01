@@ -6,6 +6,7 @@ const CalendarioGruposCitas = () => {
   const [diasMes, setDiasMes] = useState([]);
   const [gruposCitas, setGruposCitas] = useState([]);
   const [mesSeleccionado, setMesSeleccionado] = useState(mesActual);
+  const [especialidades, setEspecialidades] = useState([]);
   const [especialidadId, setEspecialidadId] = useState('');
   const [error, setError] = useState(null);
 
@@ -24,6 +25,32 @@ const CalendarioGruposCitas = () => {
       dias.push(i);
     }
     return dias;
+  };
+
+  // Cargar especialidades desde el endpoint
+  const cargarEspecialidades = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:8081/api/Especialidades', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al obtener las especialidades.');
+      }
+
+      const data = await response.json();
+      setEspecialidades(data);
+      if (data.length > 0) {
+        setEspecialidadId(data[0].id.toString()); // Seleccionar la primera especialidad por defecto
+      }
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   // Cargar grupos de citas para un mes y especialidad específicos
@@ -55,6 +82,10 @@ const CalendarioGruposCitas = () => {
   };
 
   useEffect(() => {
+    cargarEspecialidades();
+  }, []);
+
+  useEffect(() => {
     if (especialidadId) {
       const anio = new Date().getFullYear();
       const dias = obtenerDiasMes(mesSeleccionado, anio);
@@ -65,16 +96,6 @@ const CalendarioGruposCitas = () => {
 
   const verificarCitasPorDia = (dia) => {
     return gruposCitas.some((grupo) => new Date(grupo.fecha).getDate() === dia);
-  };
-
-  const handleEspecialidadSubmit = (e) => {
-    e.preventDefault();
-    if (!especialidadId.trim()) {
-      setError('Debe ingresar un ID de especialidad válido.');
-      return;
-    }
-    setError(null);
-    cargarGruposCitas(mesSeleccionado); // Cargar datos iniciales para el mes actual
   };
 
   const handleDiaClick = (dia) => {
@@ -96,33 +117,27 @@ const CalendarioGruposCitas = () => {
           <p className="text-center text-red-500 font-semibold mb-4">{error}</p>
         )}
 
-        {/* Formulario para ingresar el ID de especialidad */}
-        {!especialidadId && (
-          <form
-            onSubmit={handleEspecialidadSubmit}
-            className="space-y-4 text-center"
-          >
-            <input
-              type="number"
-              placeholder="Ingrese el ID de la Especialidad"
+        {/* Select para elegir la especialidad */}
+        {especialidades.length > 0 && (
+          <div className="space-y-4 text-center">
+            <select
               value={especialidadId}
               onChange={(e) => setEspecialidadId(e.target.value)}
               className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 bg-gray-100"
-              required
-            />
-            <button
-              type="submit"
-              className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
             >
-              Cargar Grupos de Citas
-            </button>
-          </form>
+              {especialidades.map((especialidad) => (
+                <option key={especialidad.id} value={especialidad.id}>
+                  {especialidad.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
         )}
 
-        {/* Calendario solo si se ha ingresado un ID de especialidad */}
+        {/* Calendario solo si hay una especialidad seleccionada */}
         {especialidadId && (
           <>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-4 mt-4">
               {meses
                 .slice(mesActual)
                 .concat(meses.slice(0, mesActual))
