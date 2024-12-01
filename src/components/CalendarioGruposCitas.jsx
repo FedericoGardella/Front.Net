@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 
 const CalendarioGruposCitas = () => {
   const [mesActual, setMesActual] = useState(new Date().getMonth()); // Índice del mes actual
@@ -103,7 +103,7 @@ const CalendarioGruposCitas = () => {
       (grupo) => new Date(grupo.fecha).getDate() === dia
     );
     if (grupoCita) {
-      navigate(`/grupos-citas/${grupoCita.id}`);
+      navigate(`/grupos-citas/${grupoCita.id}`, { state: { especialidadId } });
     }
   };
 
