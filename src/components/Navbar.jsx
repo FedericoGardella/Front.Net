@@ -49,6 +49,15 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
                 >
                   Medicamentos
                 </Link>
+                <Link
+                  to="/gruposcitas-create"
+                  className={`text-lg ${
+                    selectedTab === 'gruposcitas-create' ? 'text-blue-600 font-semibold' : 'text-gray-700'
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick('gruposcitas-create')}
+                >
+                  Grupos de Citas
+                </Link>
               </>
             )}
             {/* Opciones para MEDICO */}
@@ -77,17 +86,31 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
 
             {/* Opciones para PACIENTE */}
             {isAuthenticated && role === "PACIENTE" && (
-              <Link
-                to="/modulo-consulta"
-                className={`text-lg ${
-                  selectedTab === "modulo-consulta"
-                    ? "text-blue-600 font-semibold"
-                    : "text-gray-700"
-                } hover:text-blue-600 transition-colors`}
-                onClick={() => onTabClick("modulo-consulta")}
-              >
-                Mi Última Consulta
-              </Link>
+              <>
+                <Link
+                  to="/modulo-consulta"
+                  className={`text-lg ${
+                    selectedTab === "modulo-consulta"
+                      ? "text-blue-600 font-semibold"
+                      : "text-gray-700"
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick("modulo-consulta")}
+                >
+                  Mi Última Consulta
+                </Link>
+                {/* Grupos de Citas visible solo para PACIENTE */}
+                <Link
+                  to="/calendariocitas"
+                  className={`text-lg ${
+                    selectedTab === "calendariocitas"
+                      ? "text-blue-600 font-semibold"
+                      : "text-gray-700"
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick("calendariocitas")}
+                >
+                  Grupos de Citas
+                </Link>
+              </>
             )}
           </div>
         </div>

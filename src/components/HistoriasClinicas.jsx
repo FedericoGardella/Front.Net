@@ -98,22 +98,24 @@ const HistoriasClinicas = () => {
           )}
         </div>
 
-        {historias.length > 0 && (
-          <div className="relative bg-blue-50 border border-blue-200 rounded-xl overflow-y-auto max-h-[60vh]">
-            <div className="sticky top-0 bg-blue-50 z-10 p-4 border-b border-blue-300 flex justify-between items-center">
-              <h3 className="text-xl font-bold text-blue-700">
-                Historia Clínica de {historias[0].pacienteNombres} {historias[0].pacienteApellidos}
-              </h3>
-              {/* Botón para agregar nueva historia clínica */}
-              {desdeCitasHoy && (
-                <button
-                  onClick={handleAddHistoriaClinica}
-                  className="bg-cyan-500 text-white px-4 py-2 rounded-md hover:bg-cyan-600 transition-colors"
-                >
-                  + Agregar Consulta
-                </button>
-              )}
-            </div>
+        <div className="relative bg-blue-50 border border-blue-200 rounded-xl overflow-y-auto max-h-[60vh]">
+          <div className="sticky top-0 bg-blue-50 z-10 p-4 border-b border-blue-300 flex justify-between items-center">
+            <h3 className="text-xl font-bold text-blue-700">
+              {historias.length > 0
+                ? `Historia Clínica de ${historias[0].pacienteNombres} ${historias[0].pacienteApellidos}`
+                : 'Sin historias clínicas registradas'}
+            </h3>
+            {/* Botón para agregar nueva historia clínica */}
+            {desdeCitasHoy && (
+              <button
+                onClick={handleAddHistoriaClinica}
+                className="bg-cyan-500 text-white px-4 py-2 rounded-md hover:bg-cyan-600 transition-colors"
+              >
+                + Agregar Consulta
+              </button>
+            )}
+          </div>
+          {historias.length > 0 ? (
             <ul className="list-disc pl-6">
               {historias.map((historia) => (
                 <li key={historia.id} className="flex justify-between items-center mb-4">
@@ -134,8 +136,12 @@ const HistoriasClinicas = () => {
                 </li>
               ))}
             </ul>
-          </div>
-        )}
+          ) : (
+            <p className="text-center text-gray-700 p-4">
+              No se encontraron historias clínicas para este paciente.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );
