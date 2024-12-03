@@ -20,6 +20,9 @@ import GruposCitasCreate from './components/GruposCitasCreate';
 import CalendarioGruposCitas from './components/CalendarioGruposCitas';
 import DetalleGrupoCitas from './components/DetalleGrupoCitas';
 import PacientesList from './components/PacientesList';
+import EditarPaciente from './components/EditarPaciente';
+import MedicosList from './components/MedicosList';
+import EditarMedico from './components/EditarMedico';
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -74,6 +77,9 @@ const App = () => {
             <Route path="/calendariocitas" element={<PrivateRoute isAuthenticated={isAuthenticated}><CalendarioGruposCitas /></PrivateRoute>} />
             <Route path="/grupos-citas/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><DetalleGrupoCitas /></PrivateRoute>} />
             <Route path="/pacientes" element={<PrivateRoute isAuthenticated={isAuthenticated}><PacientesList /></PrivateRoute>} />
+            <Route path="/pacientes/editar/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><EditarPaciente /></PrivateRoute>} />
+            <Route path="/medicos" element={<PrivateRoute isAuthenticated={isAuthenticated}><MedicosList /></PrivateRoute>} />
+            <Route path="/medicos/editar/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><EditarMedico /></PrivateRoute>} />
           </Routes>
         </div>
       </div>

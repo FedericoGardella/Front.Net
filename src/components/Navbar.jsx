@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
   const role = localStorage.getItem('role'); // Obtén el rol del localStorage
+  const nombreUsuario = localStorage.getItem('nombre'); // Obtén el nombre del usuario del localStorage
 
   return (
     <nav className="bg-white shadow-md px-8 py-4">
@@ -49,6 +50,15 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
                   onClick={() => onTabClick('pacientes')}
                 >
                   Administrar Pacientes
+                </Link>
+                <Link
+                  to="/medicos"
+                  className={`text-lg ${
+                    selectedTab === 'medicos' ? 'text-blue-600 font-semibold' : 'text-gray-700'
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick('medicos')}
+                >
+                  Administrar Médicos
                 </Link>
                 <Link
                   to="/medicamentos"
@@ -127,6 +137,11 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
 
         {/* Autenticación */}
         <div className="flex items-center space-x-4">
+          {isAuthenticated && nombreUsuario && (
+            <p className="text-lg text-gray-700 font-semibold">
+              Bienvenido, {nombreUsuario}
+            </p>
+          )}
           {isAuthenticated ? (
             <button
               onClick={onLogout}
