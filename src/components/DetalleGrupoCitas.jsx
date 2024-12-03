@@ -86,8 +86,11 @@ const DetalleGrupoCitas = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-gray-600 font-semibold">Cargando detalles del grupo de citas...</p>
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-700 to-teal-900">
+        <div className="text-center">
+          <div className="loader mx-auto mb-4"></div>
+          <p className="text-white text-2xl font-bold">Cargando detalles del grupo de citas...</p>
+        </div>
       </div>
     );
   }

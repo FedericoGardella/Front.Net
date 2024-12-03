@@ -41,7 +41,7 @@ const ModuloConsulta = () => {
 
   if (loading) {
     return (
-      <p className="text-center text-gray-600 font-semibold">
+      <p className="text-center text-white text-2xl font-bold">
         Cargando información de la consulta...
       </p>
     );

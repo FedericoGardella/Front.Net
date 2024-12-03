@@ -28,6 +28,7 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
             >
               Inicio
             </Link>
+
             {/* Opciones para ADMIN */}
             {isAuthenticated && role === 'ADMIN' && (
               <>
@@ -39,6 +40,15 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
                   onClick={() => onTabClick('create-user')}
                 >
                   Registrar Paciente
+                </Link>
+                <Link
+                  to="/pacientes"
+                  className={`text-lg ${
+                    selectedTab === 'pacientes' ? 'text-blue-600 font-semibold' : 'text-gray-700'
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick('pacientes')}
+                >
+                  Administrar Pacientes
                 </Link>
                 <Link
                   to="/medicamentos"
@@ -60,6 +70,7 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
                 </Link>
               </>
             )}
+
             {/* Opciones para MEDICO */}
             {isAuthenticated && role === 'MEDICO' && (
               <>
@@ -98,7 +109,6 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
                 >
                   Mi Última Consulta
                 </Link>
-                {/* Grupos de Citas visible solo para PACIENTE */}
                 <Link
                   to="/calendariocitas"
                   className={`text-lg ${
