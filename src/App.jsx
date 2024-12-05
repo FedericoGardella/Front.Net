@@ -19,6 +19,14 @@ import ModuloConsulta from './components/ModuloConsulta';
 import GruposCitasCreate from './components/GruposCitasCreate';
 import CalendarioGruposCitas from './components/CalendarioGruposCitas';
 import DetalleGrupoCitas from './components/DetalleGrupoCitas';
+import PreciosEspecialidadesList from './components/PreciosEspecialidadesList';
+import PreciosEspecialidadesCreate from './components/PreciosEspecialidadesCreate';
+import PreciosEspecialidadesUpdateCosto from './components/PreciosEspecialidadesUpdateCosto';
+import TiposSegurosList from './components/TiposSegurosList';
+import TiposSegurosCreate from './components/TiposSegurosCreate';
+import TiposSegurosUpdateCosto from './components/TiposSegurosUpdateCosto';
+import ContratosSegurosCreate from './components/ContratosSegurosCreate';
+import ContratosSegurosCancel from './components/ContratosSegurosCancel';
 
 const App = () => {
   const [selectedTab, setSelectedTab] = useState('Location1');
@@ -79,6 +87,14 @@ const App = () => {
             <Route path="/gruposcitas-create" element={<GruposCitasCreate />} />
             <Route path="/calendariocitas" element={<CalendarioGruposCitas />} />
             <Route path="/grupos-citas/:id" element={<DetalleGrupoCitas />} />
+            <Route path="/precios-especialidades" element={<PreciosEspecialidadesList />} />
+            <Route path='/precios-especialidades/create' element={<PreciosEspecialidadesCreate />} />
+            <Route path='/update-costo/:id' element={<PreciosEspecialidadesUpdateCosto />} />
+            <Route path="/tipos-seguros" element={<TiposSegurosList />} />
+            <Route path="/tipos-seguros/create" element={<TiposSegurosCreate />} />
+            <Route path="/tipos-seguros/update-costo/:id" element={<TiposSegurosUpdateCosto />} />
+            <Route path="/contratos-seguros/create" element={<ContratosSegurosCreate />} />
+            <Route path="/contratos-seguros/cancel" element={<ContratosSegurosCancel />} />
           </Routes>
         </div>
       </div>
