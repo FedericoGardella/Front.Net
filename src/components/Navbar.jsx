@@ -91,6 +91,50 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
                 >
                   Grupos de Citas
                 </Link>
+                <Link
+                  to="/precios-especialidades"
+                  className={`text-lg ${
+                    selectedTab === "precios-especialidades"
+                      ? "text-blue-600 font-semibold"
+                      : "text-gray-700"
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick("precios-especialidades")}
+                >
+                  Precios Especialidades
+                </Link>
+                <Link
+                  to="/tipos-seguros"
+                  className={`text-lg ${
+                    selectedTab === "tipos-seguros"
+                      ? "text-blue-600 font-semibold"
+                      : "text-gray-700"
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick("tipos-seguros")}
+                >
+                  Tipos de Seguros
+                </Link>
+                <Link
+                  to="/contratos-seguros/create"
+                  className={`text-lg ${
+                    selectedTab === "contratos-seguros-create"
+                      ? "text-blue-600 font-semibold"
+                      : "text-gray-700"
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick("contratos-seguros-create")}
+                >
+                  Crear Contratos
+                </Link>
+                <Link
+                  to="/contratos-seguros/cancel"
+                  className={`text-lg ${
+                    selectedTab === "contratos-seguros-cancel"
+                      ? "text-blue-600 font-semibold"
+                      : "text-gray-700"
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick("contratos-seguros-cancel")}
+                >
+                  Cancelar Contratos
+                </Link>
               </>
             )}
 
@@ -138,6 +182,15 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
                   onClick={() => onTabClick('calendariocitas')}
                 >
                   Grupos de Citas
+                </Link>
+                <Link
+                  to="/facturas"
+                  className={`text-lg ${
+                    selectedTab === 'facturas' ? 'text-blue-600 font-semibold' : 'text-gray-700'
+                  } hover:text-blue-600 transition-colors`}
+                  onClick={() => onTabClick('facturas')}
+                >
+                  Facturas
                 </Link>
               </>
             )}

@@ -32,6 +32,7 @@ import EditarPaciente from './components/EditarPaciente';
 import MedicosList from './components/MedicosList';
 import EditarMedico from './components/EditarMedico';
 import RegisterMedico from './components/RegisterMedico';
+import FacturasPaciente from './components/FacturasPaciente';
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -91,14 +92,17 @@ const App = () => {
             <Route path="/medicos" element={<PrivateRoute isAuthenticated={isAuthenticated}><MedicosList /></PrivateRoute>} />
             <Route path="/medicos/editar/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><EditarMedico /></PrivateRoute>} />
             <Route path="/register-medico" element={<PrivateRoute isAuthenticated={isAuthenticated}><RegisterMedico /></PrivateRoute>} />
-            <Route path="/precios-especialidades" element={<PreciosEspecialidadesList />} />
-            <Route path='/precios-especialidades/create' element={<PreciosEspecialidadesCreate />} />
-            <Route path='/update-costo/:id' element={<PreciosEspecialidadesUpdateCosto />} />
-            <Route path="/tipos-seguros" element={<TiposSegurosList />} />
-            <Route path="/tipos-seguros/create" element={<TiposSegurosCreate />} />
-            <Route path="/tipos-seguros/update-costo/:id" element={<TiposSegurosUpdateCosto />} />
-            <Route path="/contratos-seguros/create" element={<ContratosSegurosCreate />} />
-            <Route path="/contratos-seguros/cancel" element={<ContratosSegurosCancel />} />
+            <Route path="/precios-especialidades" element={<PrivateRoute isAuthenticated={isAuthenticated}><PreciosEspecialidadesList /> </PrivateRoute>} />
+            <Route path='/precios-especialidades/create' element={<PrivateRoute isAuthenticated={isAuthenticated}><PreciosEspecialidadesCreate /> </PrivateRoute>} />
+            <Route path='/update-costo/:id' element={<PrivateRoute isAuthenticated={isAuthenticated}><PreciosEspecialidadesUpdateCosto /></PrivateRoute>} />
+            <Route path="/tipos-seguros" element={<PrivateRoute isAuthenticated={isAuthenticated}><TiposSegurosList /></PrivateRoute>} />
+            <Route path="/tipos-seguros/create" element={<PrivateRoute isAuthenticated={isAuthenticated}><TiposSegurosCreate /></PrivateRoute>} />
+            <Route path="/tipos-seguros/update-costo/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><TiposSegurosUpdateCosto /></PrivateRoute>} />
+            <Route path="/contratos-seguros/create" element={<PrivateRoute isAuthenticated={isAuthenticated}><ContratosSegurosCreate /></PrivateRoute>} />
+            <Route path="/contratos-seguros/cancel" element={<PrivateRoute isAuthenticated={isAuthenticated}><ContratosSegurosCancel /></PrivateRoute>} />
+            <Route path="/facturas" element={<FacturasPaciente />} />
+            <Route path="/pacientes/:pacienteId/facturas" element={<FacturasPaciente />} />
+
           </Routes>
         </div>
       </div>
