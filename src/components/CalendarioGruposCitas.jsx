@@ -129,7 +129,7 @@ const CalendarioGruposCitas = () => {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-700 to-teal-900 text-gray-800">
       <div className="bg-white shadow-2xl rounded-xl p-10 max-w-4xl w-full space-y-6">
         <h2 className="text-3xl font-bold text-center text-green-800 mb-6">
-          Calendario de Grupos de Citas
+          Calendario
         </h2>
         {error && (
           <p className="text-center text-red-500 font-semibold mb-4">{error}</p>

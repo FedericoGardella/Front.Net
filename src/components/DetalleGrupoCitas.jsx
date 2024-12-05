@@ -70,7 +70,7 @@ const DetalleGrupoCitas = () => {
     
       if (!response.ok) {
         const errorData = await response.json(); // Obtener el cuerpo de la respuesta
-        throw new Error(errorData.statusMessage || 'Error al agendar la cita.'); // Usar el mensaje del backend
+        throw new Error(errorData.statusMessage || 'El paciente ya tiene una cita agendada con esta Especialidad o debe contratar un seguro primero.'); // Usar el mensaje del backend
       }
     
       setCitas((prevCitas) =>
@@ -116,7 +116,7 @@ const DetalleGrupoCitas = () => {
         {/* Información del Grupo de Citas */}
         <div className="space-y-4">
           <h2 className="text-3xl font-bold text-center text-green-800">
-            Detalles del Grupo de Citas
+            Agendarme
           </h2>
           <p className="text-lg">
             <strong>Médico:</strong> {grupoCita.medicoNombre}

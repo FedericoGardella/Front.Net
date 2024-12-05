@@ -137,7 +137,7 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
                   } hover:text-blue-600 transition-colors`}
                   onClick={() => onTabClick('calendariocitas')}
                 >
-                  Grupos de Citas
+                  Calendario
                 </Link>
               </>
             )}
