@@ -30,17 +30,30 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
               Inicio
             </Link>
 
+            {/* Opciones para No Autenticados */}
+            {!isAuthenticated && (
+              <Link
+                to="/create-user"
+                className={`text-lg ${
+                  selectedTab === 'create-user' ? 'text-blue-600 font-semibold' : 'text-gray-700'
+                } hover:text-blue-600 transition-colors`}
+                onClick={() => onTabClick('create-user')}
+              >
+                Registrarme
+              </Link>
+            )}
+
             {/* Opciones para ADMIN */}
             {isAuthenticated && role === 'ADMIN' && (
               <>
                 <Link
-                  to="/create-user"
+                  to="/register-medico"
                   className={`text-lg ${
-                    selectedTab === 'create-user' ? 'text-blue-600 font-semibold' : 'text-gray-700'
+                    selectedTab === 'register-medico' ? 'text-blue-600 font-semibold' : 'text-gray-700'
                   } hover:text-blue-600 transition-colors`}
-                  onClick={() => onTabClick('create-user')}
+                  onClick={() => onTabClick('register-medico')}
                 >
-                  Registrar Paciente
+                  Registrar Médico
                 </Link>
                 <Link
                   to="/pacientes"
@@ -106,27 +119,23 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
             )}
 
             {/* Opciones para PACIENTE */}
-            {isAuthenticated && role === "PACIENTE" && (
+            {isAuthenticated && role === 'PACIENTE' && (
               <>
                 <Link
                   to="/modulo-consulta"
                   className={`text-lg ${
-                    selectedTab === "modulo-consulta"
-                      ? "text-blue-600 font-semibold"
-                      : "text-gray-700"
+                    selectedTab === 'modulo-consulta' ? 'text-blue-600 font-semibold' : 'text-gray-700'
                   } hover:text-blue-600 transition-colors`}
-                  onClick={() => onTabClick("modulo-consulta")}
+                  onClick={() => onTabClick('modulo-consulta')}
                 >
                   Mi Última Consulta
                 </Link>
                 <Link
                   to="/calendariocitas"
                   className={`text-lg ${
-                    selectedTab === "calendariocitas"
-                      ? "text-blue-600 font-semibold"
-                      : "text-gray-700"
+                    selectedTab === 'calendariocitas' ? 'text-blue-600 font-semibold' : 'text-gray-700'
                   } hover:text-blue-600 transition-colors`}
-                  onClick={() => onTabClick("calendariocitas")}
+                  onClick={() => onTabClick('calendariocitas')}
                 >
                   Grupos de Citas
                 </Link>

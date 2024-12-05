@@ -23,6 +23,7 @@ import PacientesList from './components/PacientesList';
 import EditarPaciente from './components/EditarPaciente';
 import MedicosList from './components/MedicosList';
 import EditarMedico from './components/EditarMedico';
+import RegisterMedico from './components/RegisterMedico';
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -60,7 +61,7 @@ const App = () => {
           <Routes>
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/" element={<Home />} />
-            <Route path="/create-user" element={<PrivateRoute isAuthenticated={isAuthenticated}><RegisterPaciente /></PrivateRoute>} />
+            <Route path="/create-user" element={<RegisterPaciente />} />
             <Route path="/historiasclinicas" element={<PrivateRoute isAuthenticated={isAuthenticated}><HistoriasClinicas /></PrivateRoute>} />
             <Route path="/diagnosticos/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><Diagnosticos /></PrivateRoute>} />
             <Route path="/resultadosestudios/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><ResultadosEstudios /></PrivateRoute>} />
@@ -80,6 +81,7 @@ const App = () => {
             <Route path="/pacientes/editar/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><EditarPaciente /></PrivateRoute>} />
             <Route path="/medicos" element={<PrivateRoute isAuthenticated={isAuthenticated}><MedicosList /></PrivateRoute>} />
             <Route path="/medicos/editar/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><EditarMedico /></PrivateRoute>} />
+            <Route path="/register-medico" element={<PrivateRoute isAuthenticated={isAuthenticated}><RegisterMedico /></PrivateRoute>} />
           </Routes>
         </div>
       </div>
