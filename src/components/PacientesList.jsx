@@ -35,6 +35,28 @@ const PacientesList = () => {
     fetchPacientes();
   }, []);
 
+  const handleGenerarFacturas = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:8081/api/Facturas/generar-facturas-mensuales', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.mensaje || 'Error al generar facturas mensuales.');
+      }
+
+      setStatusMessage('Facturas mensuales generadas exitosamente.');
+    } catch (error) {
+      setStatusMessage(error.message);
+    }
+  };
+
   const handleEliminarPaciente = async (id) => {
     try {
       const token = localStorage.getItem('token');
@@ -65,7 +87,7 @@ const PacientesList = () => {
 
   const handleVerFacturas = (id) => {
     navigate(`/pacientes/${id}/facturas`);
-  };  
+  };
 
   const openModal = (paciente) => {
     setSelectedPaciente(paciente);
@@ -141,6 +163,15 @@ const PacientesList = () => {
         ) : (
           <p className="text-center text-gray-600">No hay pacientes registrados.</p>
         )}
+
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={handleGenerarFacturas}
+            className="bg-teal-500 text-white py-2 px-6 rounded-lg hover:bg-teal-600 transition-colors"
+          >
+            Generar Facturas Mensuales
+          </button>
+        </div>
 
         {/* Modal de confirmación */}
         {showModal && selectedPaciente && (
