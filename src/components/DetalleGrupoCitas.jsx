@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom'; // Importa useLocation
 
 const DetalleGrupoCitas = () => {
   const { id } = useParams(); // Obtiene el ID del grupo de citas desde la URL
   const navigate = useNavigate();
+  const location = useLocation();
+  const especialidadId = location.state?.especialidadId; 
 
   const [grupoCita, setGrupoCita] = useState(null);
   const [citas, setCitas] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [statusMessage, setStatusMessage] = useState(null);
 
   useEffect(() => {
     const fetchGrupoCita = async () => {
@@ -45,10 +48,49 @@ const DetalleGrupoCitas = () => {
     navigate(-1); // Regresa a la página anterior
   };
 
+  const handleAgendarCita = async (citaId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const pacienteId = localStorage.getItem('idUsuario');
+    
+      if (!pacienteId || !especialidadId) {
+        setStatusMessage('Error: Información del paciente o especialidad no encontrada.');
+        return;
+      }
+    
+      const response = await fetch(
+        `http://localhost:8083/api/Citas/${citaId}/paciente/${pacienteId}/${especialidadId}`,
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    
+      if (!response.ok) {
+        const errorData = await response.json(); // Obtener el cuerpo de la respuesta
+        throw new Error(errorData.statusMessage || 'Error al agendar la cita.'); // Usar el mensaje del backend
+      }
+    
+      setCitas((prevCitas) =>
+        prevCitas.map((cita) =>
+          cita.id === citaId ? { ...cita, pacienteId: parseInt(pacienteId, 10) } : cita
+        )
+      );
+      setStatusMessage('Cita agendada exitosamente.');
+    } catch (error) {
+      setStatusMessage(error.message); // Mostrar el mensaje del error
+    }
+  };  
+
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-gray-600 font-semibold">Cargando detalles del grupo de citas...</p>
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-700 to-teal-900">
+        <div className="text-center">
+          <div className="loader mx-auto mb-4"></div>
+          <p className="text-white text-2xl font-bold">Cargando detalles del grupo de citas...</p>
+        </div>
       </div>
     );
   }
@@ -92,10 +134,11 @@ const DetalleGrupoCitas = () => {
           <thead>
             <tr className="bg-gray-100 text-left">
               <th className="border border-gray-300 px-4 py-2">Hora</th>
+              <th className="border border-gray-300 px-4 py-2">Acción</th>
             </tr>
           </thead>
           <tbody>
-            {citas.map((cita, index) => {
+            {citas.map((cita) => {
               // Combinar la fecha del grupo con la hora de la cita
               const citaHoraCompleta = `${grupoCita.fecha.split('T')[0]}T${cita.hora}`;
               const citaHora = new Date(citaHoraCompleta);
@@ -103,22 +146,36 @@ const DetalleGrupoCitas = () => {
               // Determinar clases CSS según si hay pacienteId
               const claseFila =
                 cita.pacienteId === null
-                  ? 'bg-green-200 hover:bg-green-300'
-                  : 'bg-red-200 hover:bg-red-300';
+                  ? 'bg-green-200 hover:bg-green-300 cursor-pointer'
+                  : 'bg-red-200 cursor-not-allowed';
 
               return (
                 <tr
-                  key={index}
+                  key={cita.id}
                   className={`${claseFila} transition-colors`}
+                  onClick={() => cita.pacienteId === null && handleAgendarCita(cita.id)}
                 >
                   <td className="border border-gray-300 px-4 py-2">
                     {citaHora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center">
+                    {cita.pacienteId === null ? 'Agendar' : 'Ocupado'}
                   </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
+
+        {statusMessage && (
+          <p
+            className={`text-center font-semibold mt-4 ${
+              statusMessage.includes('Error') ? 'text-red-500' : 'text-green-500'
+            }`}
+          >
+            {statusMessage}
+          </p>
+        )}
       </div>
     </div>
   );

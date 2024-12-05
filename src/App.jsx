@@ -27,24 +27,29 @@ import TiposSegurosCreate from './components/TiposSegurosCreate';
 import TiposSegurosUpdateCosto from './components/TiposSegurosUpdateCosto';
 import ContratosSegurosCreate from './components/ContratosSegurosCreate';
 import ContratosSegurosCancel from './components/ContratosSegurosCancel';
+import PacientesList from './components/PacientesList';
+import EditarPaciente from './components/EditarPaciente';
+import MedicosList from './components/MedicosList';
+import EditarMedico from './components/EditarMedico';
+import RegisterMedico from './components/RegisterMedico';
+
+const PrivateRoute = ({ isAuthenticated, children }) => {
+  return isAuthenticated ? children : <Navigate to="/login" />;
+};
+
 
 const App = () => {
   const [selectedTab, setSelectedTab] = useState('Location1');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Comprueba si el token está en el almacenamiento local cuando la app se monta
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
   }, []);
 
-  const handleTabClick = (tab) => {
-    setSelectedTab(tab);
-  };
+  const handleTabClick = (tab) => setSelectedTab(tab);
 
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-  };
+  const handleLogin = () => setIsAuthenticated(true);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -63,30 +68,29 @@ const App = () => {
             onLogout={handleLogout}
           />
           <Routes>
-            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
-            <Route
-              path="/create-user"
-              element={
-                isAuthenticated ? <RegisterPaciente /> : <Navigate to="/login" />
-              }
-            />
-            <Route path="/historiasclinicas" element={<HistoriasClinicas />} />
-            
-            <Route path="/diagnosticos/:id" element={<Diagnosticos />} />
-            <Route path="/resultadosestudios/:id" element={<ResultadosEstudios/>} />
-            <Route path="/medicamentos" element={<Medicamentos />} />
-            <Route path="/recetas/:id" element={<Recetas />} />
-            <Route path="/diagnosticos/:id/create" element={<CrearDiagnostico />} />
-            <Route path="/resultadosestudios/:id/create" element={<CrearResultadoEstudio />} />
-            <Route path="/recetas/:id/create" element={<CrearReceta />} />
-            <Route path="/citashoy" element={<CitasHoy />} />
-            <Route path="/consultas/:id" element={<ConsultaDetail />} />
-            <Route path="/consultascreate" element={<ConsultaCreate />} />
-            <Route path="/modulo-consulta" element={<ModuloConsulta />} />
-            <Route path="/gruposcitas-create" element={<GruposCitasCreate />} />
-            <Route path="/calendariocitas" element={<CalendarioGruposCitas />} />
-            <Route path="/grupos-citas/:id" element={<DetalleGrupoCitas />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/create-user" element={<RegisterPaciente />} />
+            <Route path="/historiasclinicas" element={<PrivateRoute isAuthenticated={isAuthenticated}><HistoriasClinicas /></PrivateRoute>} />
+            <Route path="/diagnosticos/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><Diagnosticos /></PrivateRoute>} />
+            <Route path="/resultadosestudios/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><ResultadosEstudios /></PrivateRoute>} />
+            <Route path="/medicamentos" element={<PrivateRoute isAuthenticated={isAuthenticated}><Medicamentos /></PrivateRoute>} />
+            <Route path="/recetas/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><Recetas /></PrivateRoute>} />
+            <Route path="/diagnosticos/:id/create" element={<PrivateRoute isAuthenticated={isAuthenticated}><CrearDiagnostico /></PrivateRoute>} />
+            <Route path="/resultadosestudios/:id/create" element={<PrivateRoute isAuthenticated={isAuthenticated}><CrearResultadoEstudio /></PrivateRoute>} />
+            <Route path="/recetas/:id/create" element={<PrivateRoute isAuthenticated={isAuthenticated}><CrearReceta /></PrivateRoute>} />
+            <Route path="/citashoy" element={<PrivateRoute isAuthenticated={isAuthenticated}><CitasHoy /></PrivateRoute>} />
+            <Route path="/consultas/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><ConsultaDetail /></PrivateRoute>} />
+            <Route path="/consultascreate" element={<PrivateRoute isAuthenticated={isAuthenticated}><ConsultaCreate /></PrivateRoute>} />
+            <Route path="/modulo-consulta" element={<PrivateRoute isAuthenticated={isAuthenticated}><ModuloConsulta /></PrivateRoute>} />
+            <Route path="/gruposcitas-create" element={<PrivateRoute isAuthenticated={isAuthenticated}><GruposCitasCreate /></PrivateRoute>} />
+            <Route path="/calendariocitas" element={<PrivateRoute isAuthenticated={isAuthenticated}><CalendarioGruposCitas /></PrivateRoute>} />
+            <Route path="/grupos-citas/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><DetalleGrupoCitas /></PrivateRoute>} />
+            <Route path="/pacientes" element={<PrivateRoute isAuthenticated={isAuthenticated}><PacientesList /></PrivateRoute>} />
+            <Route path="/pacientes/editar/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><EditarPaciente /></PrivateRoute>} />
+            <Route path="/medicos" element={<PrivateRoute isAuthenticated={isAuthenticated}><MedicosList /></PrivateRoute>} />
+            <Route path="/medicos/editar/:id" element={<PrivateRoute isAuthenticated={isAuthenticated}><EditarMedico /></PrivateRoute>} />
+            <Route path="/register-medico" element={<PrivateRoute isAuthenticated={isAuthenticated}><RegisterMedico /></PrivateRoute>} />
             <Route path="/precios-especialidades" element={<PreciosEspecialidadesList />} />
             <Route path='/precios-especialidades/create' element={<PreciosEspecialidadesCreate />} />
             <Route path='/update-costo/:id' element={<PreciosEspecialidadesUpdateCosto />} />

@@ -38,6 +38,9 @@ const CitasHoy = () => {
           }
         } else {
           const data = await response.json();
+          // Filtrar citas que tienen pacienteId distinto de null
+          data.citas = data.citas.filter((cita) => cita.pacienteId !== null);
+
           setGrupoCitas(data);
 
           // Obtener información de los pacientes
@@ -122,7 +125,7 @@ const CitasHoy = () => {
     return <p className="text-center text-red-500">{error}</p>;
   }
 
-  if (!grupoCitas) {
+  if (!grupoCitas || grupoCitas.citas.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100 text-gray-800">
         <div className="bg-white shadow-md rounded-xl p-10 text-center">

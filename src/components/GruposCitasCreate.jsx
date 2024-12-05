@@ -17,28 +17,6 @@ const GruposCitasCreate = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const cargarEspecialidades = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:8081/api/Especialidades', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Error al obtener las especialidades.');
-        }
-
-        const data = await response.json();
-        setEspecialidades(data);
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-
     const cargarMedicos = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -61,9 +39,46 @@ const GruposCitasCreate = () => {
       }
     };
 
-    cargarEspecialidades();
     cargarMedicos();
   }, []);
+
+  const cargarEspecialidades = async (medicoId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:8081/api/Especialidades/Medico/${medicoId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al obtener las especialidades del médico seleccionado.');
+      }
+
+      const data = await response.json();
+      setEspecialidades(data);
+    } catch (error) {
+      setError(error.message);
+      setEspecialidades([]); // Limpiar especialidades si ocurre un error
+    }
+  };
+
+  const handleMedicoChange = (e) => {
+    const medicoId = e.target.value;
+    setFormData((prevData) => ({
+      ...prevData,
+      medicoId,
+      especialidadId: '', // Resetear especialidad seleccionada
+    }));
+
+    if (medicoId) {
+      cargarEspecialidades(medicoId); // Cargar especialidades del médico seleccionado
+    } else {
+      setEspecialidades([]); // Limpiar especialidades si no hay médico seleccionado
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -111,6 +126,7 @@ const GruposCitasCreate = () => {
           cantidadCitas: '',
           intervaloMinutos: '',
         });
+        setEspecialidades([]); // Limpiar especialidades
       } else {
         const errorData = await response.json();
         setStatusMessage(errorData.mensaje || 'Error al crear el grupo de citas.');
@@ -149,7 +165,7 @@ const GruposCitasCreate = () => {
             <select
               name="medicoId"
               value={formData.medicoId}
-              onChange={handleChange}
+              onChange={handleMedicoChange}
               required
               className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100"
             >
@@ -165,6 +181,7 @@ const GruposCitasCreate = () => {
               value={formData.especialidadId}
               onChange={handleChange}
               required
+              disabled={!formData.medicoId} // Desactivar si no hay médico seleccionado
               className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100"
             >
               <option value="">Seleccione una Especialidad</option>

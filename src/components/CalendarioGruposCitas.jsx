@@ -9,6 +9,7 @@ const CalendarioGruposCitas = () => {
   const [especialidades, setEspecialidades] = useState([]);
   const [especialidadId, setEspecialidadId] = useState('');
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); // Estado de carga
 
   const navigate = useNavigate();
 
@@ -30,6 +31,7 @@ const CalendarioGruposCitas = () => {
   // Cargar especialidades desde el endpoint
   const cargarEspecialidades = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:8081/api/Especialidades', {
         method: 'GET',
@@ -50,6 +52,8 @@ const CalendarioGruposCitas = () => {
       }
     } catch (error) {
       setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,6 +61,7 @@ const CalendarioGruposCitas = () => {
   const cargarGruposCitas = async (mes) => {
     try {
       setError(null);
+      setLoading(true);
       const token = localStorage.getItem('token');
       const anio = new Date().getFullYear();
       const response = await fetch(
@@ -78,6 +83,8 @@ const CalendarioGruposCitas = () => {
       setGruposCitas(data);
     } catch (error) {
       setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -103,9 +110,20 @@ const CalendarioGruposCitas = () => {
       (grupo) => new Date(grupo.fecha).getDate() === dia
     );
     if (grupoCita) {
-      navigate(`/grupos-citas/${grupoCita.id}`);
+      navigate(`/grupos-citas/${grupoCita.id}`, { state: { especialidadId } });
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-700 to-teal-900">
+        <div className="text-center">
+          <div className="loader mx-auto mb-4"></div>
+          <p className="text-white text-2xl font-bold">Cargando calendario...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-700 to-teal-900 text-gray-800">
@@ -175,7 +193,7 @@ const CalendarioGruposCitas = () => {
               })}
             </div>
           </>
-        )}
+        )}  
       </div>
     </div>
   );
