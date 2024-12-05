@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
   const role = localStorage.getItem('role'); // Obtén el rol del localStorage
   const nombreUsuario = localStorage.getItem('nombre'); // Obtén el nombre del usuario del localStorage
+  const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false);
 
   return (
     <nav className="bg-white shadow-md px-8 py-4">
@@ -45,97 +46,124 @@ const Navbar = ({ selectedTab, onTabClick, isAuthenticated, onLogout }) => {
 
             {/* Opciones para ADMIN */}
             {isAuthenticated && role === 'ADMIN' && (
-              <>
-                <Link
-                  to="/register-medico"
-                  className={`text-lg ${
-                    selectedTab === 'register-medico' ? 'text-blue-600 font-semibold' : 'text-gray-700'
-                  } hover:text-blue-600 transition-colors`}
-                  onClick={() => onTabClick('register-medico')}
+              <div className="relative">
+                <button
+                  onClick={() => setIsAdminMenuOpen(!isAdminMenuOpen)}
+                  className="text-sm text-gray-700 hover:text-blue-600 font-semibold px-2 py-1 flex items-center"
                 >
-                  Registrar Médico
-                </Link>
-                <Link
-                  to="/pacientes"
-                  className={`text-lg ${
-                    selectedTab === 'pacientes' ? 'text-blue-600 font-semibold' : 'text-gray-700'
-                  } hover:text-blue-600 transition-colors`}
-                  onClick={() => onTabClick('pacientes')}
-                >
-                  Administrar Pacientes
-                </Link>
-                <Link
-                  to="/medicos"
-                  className={`text-lg ${
-                    selectedTab === 'medicos' ? 'text-blue-600 font-semibold' : 'text-gray-700'
-                  } hover:text-blue-600 transition-colors`}
-                  onClick={() => onTabClick('medicos')}
-                >
-                  Administrar Médicos
-                </Link>
-                <Link
-                  to="/medicamentos"
-                  className={`text-lg ${
-                    selectedTab === 'medicamentos' ? 'text-blue-600 font-semibold' : 'text-gray-700'
-                  } hover:text-blue-600 transition-colors`}
-                  onClick={() => onTabClick('medicamentos')}
-                >
-                  Medicamentos
-                </Link>
-                <Link
-                  to="/gruposcitas-create"
-                  className={`text-lg ${
-                    selectedTab === 'gruposcitas-create' ? 'text-blue-600 font-semibold' : 'text-gray-700'
-                  } hover:text-blue-600 transition-colors`}
-                  onClick={() => onTabClick('gruposcitas-create')}
-                >
-                  Grupos de Citas
-                </Link>
-                <Link
-                  to="/precios-especialidades"
-                  className={`text-lg ${
-                    selectedTab === "precios-especialidades"
-                      ? "text-blue-600 font-semibold"
-                      : "text-gray-700"
-                  } hover:text-blue-600 transition-colors`}
-                  onClick={() => onTabClick("precios-especialidades")}
-                >
-                  Precios Especialidades
-                </Link>
-                <Link
-                  to="/tipos-seguros"
-                  className={`text-lg ${
-                    selectedTab === "tipos-seguros"
-                      ? "text-blue-600 font-semibold"
-                      : "text-gray-700"
-                  } hover:text-blue-600 transition-colors`}
-                  onClick={() => onTabClick("tipos-seguros")}
-                >
-                  Tipos de Seguros
-                </Link>
-                <Link
-                  to="/contratos-seguros/create"
-                  className={`text-lg ${
-                    selectedTab === "contratos-seguros-create"
-                      ? "text-blue-600 font-semibold"
-                      : "text-gray-700"
-                  } hover:text-blue-600 transition-colors`}
-                  onClick={() => onTabClick("contratos-seguros-create")}
-                >
-                  Crear Contratos
-                </Link>
-                <Link
-                  to="/contratos-seguros/cancel"
-                  className={`text-lg ${
-                    selectedTab === "contratos-seguros-cancel"
-                      ? "text-blue-600 font-semibold"
-                      : "text-gray-700"
-                  } hover:text-blue-600 transition-colors`}
-                  onClick={() => onTabClick("contratos-seguros-cancel")}
-                >
-                  Cancelar Contratos
-                </Link>
-              </>
+                  Admin Menu
+                  <svg
+                    className={`w-4 h-4 ml-2 transform ${
+                      isAdminMenuOpen ? 'rotate-180' : ''
+                    } transition-transform`}
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                {isAdminMenuOpen && (
+                  <div className="absolute bg-white shadow-md rounded-md mt-2 z-10">
+                    <Link
+                      to="/register-medico"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100"
+                      onClick={() => {
+                        onTabClick('register-medico');
+                        setIsAdminMenuOpen(false);
+                      }}
+                    >
+                      Registrar Médico
+                    </Link>
+                    <Link
+                      to="/pacientes"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100"
+                      onClick={() => {
+                        onTabClick('pacientes');
+                        setIsAdminMenuOpen(false);
+                      }}
+                    >
+                      Administrar Pacientes
+                    </Link>
+                    <Link
+                      to="/medicos"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100"
+                      onClick={() => {
+                        onTabClick('medicos');
+                        setIsAdminMenuOpen(false);
+                      }}
+                    >
+                      Administrar Médicos
+                    </Link>
+                    <Link
+                      to="/medicamentos"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100"
+                      onClick={() => {
+                        onTabClick('medicamentos');
+                        setIsAdminMenuOpen(false);
+                      }}
+                    >
+                      Medicamentos
+                    </Link>
+                    <Link
+                      to="/gruposcitas-create"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100"
+                      onClick={() => {
+                        onTabClick('gruposcitas-create');
+                        setIsAdminMenuOpen(false);
+                      }}
+                    >
+                      Grupos de Citas
+                    </Link>
+                    <Link
+                      to="/precios-especialidades"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100"
+                      onClick={() => {
+                        onTabClick('precios-especialidades');
+                        setIsAdminMenuOpen(false);
+                      }}
+                    >
+                      Precios Especialidades
+                    </Link>
+                    <Link
+                      to="/tipos-seguros"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100"
+                      onClick={() => {
+                        onTabClick('tipos-seguros');
+                        setIsAdminMenuOpen(false);
+                      }}
+                    >
+                      Tipos de Seguros
+                    </Link>
+                    <Link
+                      to="/contratos-seguros/create"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100"
+                      onClick={() => {
+                        onTabClick('contratos-seguros-create');
+                        setIsAdminMenuOpen(false);
+                      }}
+                    >
+                      Crear Contratos
+                    </Link>
+                    <Link
+                      to="/contratos-seguros/cancel"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100"
+                      onClick={() => {
+                        onTabClick('contratos-seguros-cancel');
+                        setIsAdminMenuOpen(false);
+                      }}
+                    >
+                      Cancelar Contratos
+                    </Link>
+                  </div>
+                )}
+              </div>
             )}
 
             {/* Opciones para MEDICO */}
