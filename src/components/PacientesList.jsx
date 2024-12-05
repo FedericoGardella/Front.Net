@@ -63,6 +63,10 @@ const PacientesList = () => {
     navigate(`/pacientes/editar/${id}`);
   };
 
+  const handleVerFacturas = (id) => {
+    navigate(`/pacientes/${id}/facturas`);
+  };  
+
   const openModal = (paciente) => {
     setSelectedPaciente(paciente);
     setShowModal(true);
@@ -122,6 +126,12 @@ const PacientesList = () => {
                       className="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600"
                     >
                       Eliminar
+                    </button>
+                    <button
+                      onClick={() => handleVerFacturas(paciente.id)}
+                      className="bg-green-500 text-white py-1 px-4 rounded hover:bg-green-600"
+                    >
+                      Ver Facturas
                     </button>
                   </td>
                 </tr>
