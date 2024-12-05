@@ -6,10 +6,12 @@ const EditarPaciente = () => {
   const navigate = useNavigate();
 
   const [paciente, setPaciente] = useState({
+    id: id, // Incluye el ID en el estado
     nombres: '',
     apellidos: '',
     documento: '',
     telefono: '',
+    historiaClinicaId: 0, // Inicializa con un valor por defecto
   });
   const [error, setError] = useState(null);
   const [statusMessage, setStatusMessage] = useState(null);
@@ -34,10 +36,12 @@ const EditarPaciente = () => {
 
         const data = await response.json();
         setPaciente({
+          id: data.id, // Asegúrate de incluir el ID en el estado
           nombres: data.nombres,
           apellidos: data.apellidos,
           documento: data.documento,
           telefono: data.telefono,
+          historiaClinicaId: data.historiaClinicaId || 0, // Manejar valores nulos o no proporcionados
         });
       } catch (error) {
         setError(error.message);
@@ -64,7 +68,7 @@ const EditarPaciente = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(paciente),
+        body: JSON.stringify(paciente), // Enviar el estado completo
       });
 
       if (!response.ok) {

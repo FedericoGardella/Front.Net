@@ -6,6 +6,7 @@ const EditarMedico = () => {
   const navigate = useNavigate();
 
   const [medico, setMedico] = useState({
+    id: 0,
     nombres: '',
     apellidos: '',
     documento: '',
@@ -34,6 +35,7 @@ const EditarMedico = () => {
 
         const data = await response.json();
         setMedico({
+          id: data.id,
           nombres: data.nombres,
           apellidos: data.apellidos,
           documento: data.documento,
@@ -64,7 +66,7 @@ const EditarMedico = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(medico),
+        body: JSON.stringify(medico), // Enviar el objeto médico actualizado
       });
 
       if (!response.ok) {
